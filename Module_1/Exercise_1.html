@@ -17,27 +17,33 @@
     <br />
 
     <!-- looks like this is not a resizable exercise.  So Make a box for the whole mess -->
-
+    <!-- Arial, Helvetica, sans-serif;-->
     <style>
 
-        #stage
-        {
+        #stage {
             width: 700px;
             height: 600px;
             border: dashed;
-
         }
 
-        #topheader
-        {
+        #topheader {
             display: block;
-            background-color: #88b47f; 
+            background-color: #88b47f;
             width: inherit;
             height: 60px;
         }
 
-        #map 
-        {
+        #headerText {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 20px;
+            font-weight: bold;
+            color: black;
+            padding-top: 15px;
+            padding-left: 40px;
+        }
+
+
+        #map {
             display: block;
             width: 500px;
             height: 500px;
@@ -45,12 +51,11 @@
             float: left;
         }
 
-        #cOButtons 
-        {
+        #cOButtons {
             display: block;
             width: 200px;
             height: 500px;
-            background-color:#fdcec6;
+            background-color: #fdcec6;
             float: left;
         }
 
@@ -68,7 +73,9 @@
 
     <div id="stage">
         <!-- Top piece goes all across top -->
-        <div id="topheader"><h2>Grand Hawaiian Tour</h2></div>
+        <div id="topheader">
+            <div id="headerText">Grand Hawaiian Tour</div>
+        </div>
         <!-- Main Map Picture is aligned Left -->
         <!-- use Div to creat the actual map-->
         <div id="map"></div>
