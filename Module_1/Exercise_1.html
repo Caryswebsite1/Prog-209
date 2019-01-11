@@ -4,29 +4,24 @@
 <head>
     <meta charset="utf-8" />
     <title>Exercise 1</title>
+
+    <link rel="stylesheet" href="HawaiiMapStyleSheet.css">
 </head>
 
 <body>
-    <p><h3>Exercise 1</h3></p>
-    <br />
-
-    <p>IN Work!</p>
-    <a href=" ../index.html" target="_blank">Go Home</a>
-
-    <br />
-    <br />
+    
 
     <!-- looks like this is not a resizable exercise.  So Make a box for the whole mess -->
-    <!-- Arial, Helvetica, sans-serif;-->
+    <!-- Closest font I can come up with is: Arial, Helvetica, sans-serif;-->
+    <!--  COMMENTING OUT Because it's all in the .css file now'
     <style>
 
         #stage {
             width: 700px;
             height: 600px;
-            border: dashed;
         }
 
-        #topheader {
+        #topBanner {
             display: block;
             background-color: #88b47f;
             width: inherit;
@@ -38,12 +33,13 @@
             font-size: 20px;
             font-weight: bold;
             color: black;
-            padding-top: 15px;
+            padding-top: 20px;
             padding-left: 40px;
         }
 
 
         #map {
+            position: relative;
             display: block;
             width: 500px;
             height: 500px;
@@ -51,37 +47,121 @@
             float: left;
         }
 
+        #sprite {
+            position: absolute;
+            top: 160px;
+            left: 180px;
+            display: block;
+            width: 66px;
+            height: 64px;
+            background-image: url("sprite.png");
+        }
+
         #cOButtons {
             display: block;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
             width: 200px;
             height: 500px;
             background-color: #fdcec6;
             float: left;
         }
+        #cButtonSpacer{
+            display: block;
+            width:inherit;
+            height: 2px;
+            background-color:inherit;
+        }
+
+        #cbheadtxt {
+            display: block;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 15px;
+            font-weight: bold;
+            color: black;
+            padding-top: 14px;
+        }
+
+        #cbtext {
+            display: block;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
+            font-weight: normal;
+            color: black;
+            padding-top: 15px;
+            padding-bottom: 13px;
+        }
 
         #copyrightBanner {
             clear: left;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 15px;
+            font-weight: bold;
+            color: black;
             text-align: center;
             display: block;
             background-color: #bdb76b;
             width: inherit;
             height: 40px;
         }
+
+
+        button {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 13px;
+            color: black;
+            padding: 2px 10px;
+            border: 1px solid #000;
+            cursor: pointer;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+            background: -webkit-linear-gradient(top, #fcfcfc, #d0ced1);
+            background: -moz-linear-gradient(top, #fcfcfc, #d0ced1);
+            background: linear-gradient(top, #fcfcfc, #d0ced1);
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+            button:hover {
+                background: -webkit-linear-gradient(top, #acc7a3, #506651);
+                background: -moz-linear-gradient(top, #acc7a3, #506651);
+                background: linear-gradient(top, #acc7a3, #506651);
+            }
+
+            button:active {
+                background: -webkit-linear-gradient(top, #bdb76b, #c5c9a9);
+                background: -moz-linear-gradient(top, #bdb76b, #c5c9a9);
+                background: linear-gradient(top, #bdb76b, #c5c9a9);
+            }
+
     </style>
 
-
+-->
 
     <div id="stage">
         <!-- Top piece goes all across top -->
-        <div id="topheader">
-            <div id="headerText">Grand Hawaiian Tour</div>
+        <div id="topBanner">
+            <div id="headerText"><strong>Grand Hawaiian Tour</strong></div>
         </div>
-        <!-- Main Map Picture is aligned Left -->
-        <!-- use Div to creat the actual map-->
-        <div id="map"></div>
 
+        <!-- Main Map Picture is aligned Left -->
+        <!-- Sprite goes inside, absolute, rel to map-->
+        <div id="map">
+            <div id="sprite"></div>
+        </div>
+
+        <!-- Column of buttons with imbedded text and buttons-->
         <div id="cOButtons">
-            <p><h4>Column O' Buttons</h4></p>
+            <div id="cbheadtxt">Column 'o buttons</div>
+            <div id="cbtext">This is an awsome game!</div>
+        
+            <!-- add buttons and use spacer between them -->
+            <button>Click to play</button>
+            <div id="cButtonSpacer"></div>
+            <button>Toss in the towel</button>
+
         </div>
 
         <div id="copyrightBanner">Copyright @ BC Game Demons</div>
