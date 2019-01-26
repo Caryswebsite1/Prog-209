@@ -1,10 +1,10 @@
-﻿
 
 
-body{
+
+body {
     background-image: url("donuts.jpg");
-    background-repeat:no-repeat;
-    background-size:cover;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 fieldset#DonutInfo {
@@ -61,10 +61,15 @@ input {
     width: 50%;
 }
 
- 
+
 
     input#State {
-        width: 50px;
+        width: 30px;
+    }
+
+
+    input#Zip {
+        width: 60px;
     }
 
 
@@ -76,7 +81,7 @@ input {
         background-color: rgb(76, 255, 0);
     }
 
- 
+
 select {
     display: block;
     float: left;
@@ -86,8 +91,7 @@ select {
 
 
 section#orderdetails {
-   
-    width:100%;
+    width: 100%;
     clear: left;
     background-color: rgb(80, 175, 0);
 }
