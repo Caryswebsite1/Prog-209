@@ -1,0 +1,63 @@
+﻿html, body, div {
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+    color: black;
+    
+}
+
+body {
+    font-family: Verdana, Arial, sans-serif;
+}
+
+#container {
+    margin: 25px auto;
+    background-color: OldLace;
+    border: 1px solid Silver;
+    width: 440px;
+    height: 250px;
+    padding: 10px 30px;
+}
+
+.colorBox {
+    display: block;
+    width: 40px;
+    height: 25px;
+    border: 1px solid LightGray;
+    float: left;
+    text-align: center;
+}
+
+#colorBar {
+    width: 400px;
+    height: 50px;
+    background-color: OldLace;
+    margin-top: 20px;
+    border: 1px solid LightGray;
+}
+
+fieldset{
+    display:block;
+    float:left;
+    
+}
+
+
+label {
+    display: block;
+}
+
+
+button {
+    margin-bottom: 4px;
+}
+
+input {
+    text-align: right;
+}
+
+#myTitle{
+    color:blueviolet;
+    text-align:center;
+    font-size: 26px;
+}

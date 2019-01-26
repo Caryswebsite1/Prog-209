@@ -1,0 +1,93 @@
+﻿
+
+
+body{
+    background-image: url("Donuts.jpg");
+    background-repeat:no-repeat;
+    background-size:cover;
+}
+
+fieldset#DonutInfo {
+    display: block;
+    background-color: rgb(80, 175, 0);
+    border: 1px solid rgb(233,69,0);
+    float: left;
+    margin: 10px 0px 30px 2.5%;
+    width: 30%;
+    height: 316px;
+}
+
+
+fieldset#ShippingInfo {
+    display: block;
+    background-color: rgb(80, 175, 0);
+    border: 1px solid rgb(233,69,0);
+    float: left;
+    margin: 10px 0px 30px 5%;
+    width: 30%;
+}
+
+
+legend {
+    background-color: rgb(233,69,0);
+    color: white;
+    padding: 3px 0px;
+    text-indent: 5px;
+    width: 100%;
+}
+
+label {
+    clear: left;
+    display: block;
+    float: left;
+    font-size: 0.9em;
+    margin: 7px 2% 7px 5px;
+    width: 20%;
+}
+
+#myHeader {
+    font-size: 60px;
+    text-align: center;
+    color: rgb(76, 255, 0);
+}
+
+
+
+input {
+    display: block;
+    float: left;
+    font-size: 0.9em;
+    margin: 7px 0px;
+    width: 50%;
+}
+
+ 
+
+    input#State {
+        width: 50px;
+    }
+
+
+    input#button {
+        clear: left;
+        margin: 0px 0px 50px 20px;
+        min-width: 60px;
+        width: 8%;
+        background-color: rgb(76, 255, 0);
+    }
+
+ 
+select {
+    display: block;
+    float: left;
+    font-size: 0.9em;
+    margin: 7px 0px;
+}
+
+
+section#orderdetails {
+   
+    width:100%;
+    clear: left;
+    background-color: rgb(80, 175, 0);
+}

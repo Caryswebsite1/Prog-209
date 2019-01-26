@@ -1,0 +1,259 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="Viewport" content="width=device-width">
+    <title>Donuts4U</title>
+
+    <link href="DonutStyle.css" type="text/css" rel="stylesheet" />
+
+    <script>
+        window.addEventListener("load", init);
+
+        function init() {
+            if (typeof (Storage) !== "undefined") {
+
+                display();
+
+                var button = document.getElementById("button");
+                button.addEventListener("click", saveInfo);
+            }
+
+            else {
+                //old bowser
+            }
+        }
+
+        // saves selected info into local storage
+        function saveInfo() {
+            //init vars
+            var BaseDonutArray = null;
+            var ToppingArray = null;
+            var FillingArray = null;
+            var Sprinkles = null;
+
+            // determine what was checked or selected.
+            var BaseDValue = "none";
+            var TopValue = "none";
+            var FillValue = "none";
+            var i = 0;
+
+            //Shipping info
+            var FirstName = null;
+            var LastName = null;
+            var Street = null;
+            var City = null;
+            var State = null;
+            var Zip = null;
+            var Phone = null;
+
+
+            // get the selected values from the form controls
+            var BaseDonutArray = document.getElementsByName("Base");
+            var ToppingArray = document.getElementById("Topping");
+            var FillingArray = document.getElementById("Filling");
+            var Sprinkles = document.getElementById("Sprinkles").value;
+
+
+            // base donut type
+            if (BaseDonutArray != null) {
+                for (i = 0; i < BaseDonutArray.length; i++) {
+                    if (BaseDonutArray[i].checked) {
+                        BaseDValue = BaseDonutArray[i].value;
+                        break;
+                    }
+                }
+            }
+
+            // Topping
+            if (ToppingArray != null) {
+                TopValue = ToppingArray.options[ToppingArray.selectedIndex].value;
+            }
+
+            // Filling
+            if (FillingArray != null && BaseDValue == "Filled") {
+                FillValue = FillingArray.options[FillingArray.selectedIndex].value;
+            }
+
+            //Shipping info
+            var FirstName = document.getElementById("FirstName").value;
+            var LastName = document.getElementById("LastName").value;
+            var Street = document.getElementById("StreetAdd").value;
+            var City = document.getElementById("City").value;
+            var State = document.getElementById("State").value;
+            var Zip = document.getElementById("Zip").value;
+            var Phone = document.getElementById("Phone").value;
+
+
+            // put selected values into local storage
+            localStorage.setItem("base", BaseDValue);
+            localStorage.setItem("top", TopValue);
+            localStorage.setItem("fill", FillValue);
+            localStorage.setItem("sprink", Sprinkles);
+
+            localStorage.setItem("fName", FirstName);
+            localStorage.setItem("lName", LastName);
+            localStorage.setItem("streetName", Street);
+            localStorage.setItem("cityName", City);
+            localStorage.setItem("stateName", State);
+            localStorage.setItem("zipCode", Zip);
+            localStorage.setItem("phoneNum", Phone);
+
+
+            display();
+
+        } // end save info
+
+
+        // display user selected info in order details section
+        function display() {
+
+            var Sprinkles = "";
+            //var rightBox = document.getElementById("orderdetails");
+
+            var theBase = localStorage.getItem("base");
+            var theTop = localStorage.getItem("top");
+            var theFill = localStorage.getItem("fill");
+            var theSprink = localStorage.getItem("sprink");
+
+            var theFirst = localStorage.getItem("fName");
+            var theLast = localStorage.getItem("lName");
+            var theStreet = localStorage.getItem("streetName");
+            var theCity = localStorage.getItem("cityName");
+            var theState = localStorage.getItem("stateName");
+            var theZip = localStorage.getItem("zipCode");
+            var thePhone = localStorage.getItem("phoneNum");
+
+            if (theSprink == "true") { Sprinkles = "Sprinkles"; }
+
+            if (theBase == "none") {
+                document.getElementById("orderdetails").innerHTML = "<br />No order yet<br /><br />";
+            }
+            else {
+                document.getElementById("orderdetails").innerHTML = "Order Details:  <hr /><br />Donuts: <br />"
+                    + "Base Type: " + theBase + "<br />"
+                    + "Topping:   " + theTop + "<br />"
+                    + "Filling:   " + theFill + "<br />"
+                    + Sprinkles +
+                    " <br /><br />"
+                    + "Shipping To: <br />"
+                    + "Name:   " + theFirst + " " + theLast + "<br />"
+                    + "Street: " + theStreet + "<br />"
+                    + "City:   " + theCity + "<br />"
+                    + "State:  " + theState + "<br />"
+                    + "ZIP:    " + theZip + "<br />"
+                    + "Phone:  " + thePhone + "<br /><br /><br />";
+
+
+            }// end else
+
+
+        }// end display
+
+    </script>
+
+</head>
+<body>
+    <div id="main">
+        <section id="userinput">
+           <div id="myHeader">Donuts4U</div>
+            <hr />
+            
+
+            <form autocomplete="false">
+                <fieldset id="DonutInfo">
+                    <legend>About Your Donuts!</legend>
+
+                    <label for="Regular">Regular</label>
+                    <input id="Regular" type="radio" name="Base" value="Regular" />
+
+                    <label for="Cake">Cake</label>
+                    <input id="Cake" type="radio" name="Base" value="Cake" />
+
+                    <label for="Filled">Filled</label>
+                    <input id="Filled" type="radio" name="Base" value="Filled" />
+                    <br />
+                    <br />
+                    <label>
+                        Topping <br />
+                        <select id="Topping">
+                            <option value="None">None</option>
+                            <option value="Glaze">Glaze</option>
+                            <option value="Powder Sugar">Powder Sugar</option>
+                            <option value="Apple Crumble">Apple Crumble</option>
+                            <option value="Cinnamon Crumble">Cinnamon Crumble</option>
+                            <option value="Vanila Frosting">Vanila Frosting</option>
+                            <option value="Chocolate Frosting">Chocolate Frosting</option>
+                            <option value="Strawberry Frosting">Strawberry Frosting</option>
+                        </select>
+                    </label>
+                    <br />
+                    <br />
+                    <label>
+                        Filling <br />
+                        <select id="Filling">
+                            <option value="None">None</option>
+                            <option value="Strawberry">Strawberry</option>
+                            <option value="Raspberry">Raspberry</option>
+                            <option value="Apple">Apple</option>
+                            <option value="Cran-Orange">Cran-Orange</option>
+                            <option value="Bavarian Cream">Bavarian Cream</option>
+                            <option value="Chocolate Pudding">Chocolate Pudding</option>
+                            <option value="Strawberry Frosting">Strawberry Frosting</option>
+                            <option value="Vanila Frosting">Vanila Frosting</option>
+                            <option value="Chocolate Frosting">Chocolate Frosting</option>
+                            <option value="Cream Cheese Frosting">Cream Cheese Frosting</option>
+                        </select>
+                    </label>
+                    <br />
+                    <br />
+                    <label for="Sprinkles">Sprinkles?</label>
+                    <input id="Sprinkles" type="checkbox" name="Sprinkles" value="true" />
+                </fieldset>
+                
+
+                <fieldset id="ShippingInfo">
+                    <legend>Shipping Address</legend>
+
+                    <label for="FirstName">First Name: </label>
+                    <input type="text" name="FirstName" id="FirstName" placeholder="First Name" />
+
+                    <label for="LastName">Last Name:</label>
+                    <input type="text" name="LastName" id="LastName" placeholder="Last Name" />
+
+                    <label for="StreetAdd">Street Address:</label>
+                    <input type="text" name="StreetAdd" id="StreetAdd" />
+
+                    <label for="City">City:</label>
+                    <input type="text" name="City" id="City" />
+
+                    <label for="State">State:</label>
+                    <input name="State" id="State" type="text"  />
+
+                    <label for="Zip">Zip:</label>
+                    <input type="text" name="Zip" id="Zip" placeholder="nnnnn" />
+
+                    <label for="Phone">Phone:</label>
+                    <input type="input" name="Phone" id="Phone" placeholder="nnn-nnn-nnnn" />
+
+                </fieldset>
+
+    </div> <!-- End Main-->
+    <br />
+    <div><input type="button" id="button" value="Save"></div>
+
+    </form>
+    </section>
+
+
+    <section id="orderdetails">
+        Order Details:
+        <hr />
+        <br /><br />
+    </section>
+    </div>
+
+
+
+</body>
+</html>

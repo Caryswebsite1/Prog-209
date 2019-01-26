@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My Color Changer</title>
+
+    <link rel="stylesheet" href="MyColorStyleSheet.css">
+
+</head>
+<body>
+    <div id="container">
+        <div id="myTitle">My Color Changer<div>
+<br />
+        <div> Select a number from 0 to 255 for each color value</div>
+<br />
+        <form autocomplete="false">
+
+            <fieldset id="RedBox">
+                <label>Red:</label>
+                <input class="colorBox" type="text" maxlength ="3" name="RedColorText" id="RedColorText" placeholder="0" />
+            </fieldset>
+
+            <fieldset id="GreenBox">
+                <label>Green:</label>
+                <input class="colorBox" type="text" maxlength ="3" name="GreenColorText" id="GreenColorText" placeholder="0" />
+            </fieldset>
+
+            <fieldset id="BlueBox">
+                <label>Blue:</label>
+                <input class="colorBox" type="text" maxlength ="3" name="BlueColorText" id="BlueColorText" placeholder="0" />
+            </fieldset>
+
+            </form>
+
+            <button id="show">Show me the color!</button><br />
+            <button id="clear">Clear all</button>
+            <div id="colorBar"></div>
+            <br />
+            <label>Hex Value:</label>
+            <div id="HexValue">xxxxxx</div></div>
+</div>
+
+    <script src="MyColorProgram.js"></script>
+</body>
+</html>
