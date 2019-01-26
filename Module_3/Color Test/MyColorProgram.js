@@ -25,10 +25,10 @@ function showColorHandler(e) {
     blueInput = document.querySelector("#BlueColorText");
     b = parseInt(blueInput.value);
 
-    
+
 
     // validate the input values
-    if (validate(r) && validate(g) && validate(b) ) {
+    if (validate(r) && validate(g) && validate(b)) {
         // ok to change the color
         colorBar.style.backgroundColor = "rgb(" + r + "," + g + "," + b + ")";
 
@@ -36,12 +36,11 @@ function showColorHandler(e) {
         var colorHex = fullColorHex(r, g, b);
         document.getElementById("HexValue").innerHTML = colorHex;
     }
-    else
-    {
+    else {
         alert("You must enter a number from 0 to 255 for each color!");
         clear();
     }
- 
+
 }// end show color handler
 
 
@@ -50,8 +49,7 @@ function validate(n) {
         // bad input
         return false;
     }
-    else
-    {
+    else {
         return true;
     }
 }// end validate
@@ -66,9 +64,9 @@ function clear() {
     colorBar.style.backgroundColor = "OldLace";
 
     // set color input boxes to 000
-    document.getElementById("RedColorText").value = "000";
-    document.getElementById("GreenColorText").value = "000";
-    document.getElementById("BlueColorText").value = "000";
+    document.getElementById("RedColorText").value = "xxx";
+    document.getElementById("GreenColorText").value = "xxx";
+    document.getElementById("BlueColorText").value = "xxx";
 
     // set hex value to xxxxxx
     document.getElementById("HexValue").innerHTML = "xxxxxx";
@@ -85,7 +83,7 @@ function rgbToHex(rgb) {
 }
 
 // convert a full set of rgb to hex
- function fullColorHex(r, g, b) {
+function fullColorHex(r, g, b) {
     var red = rgbToHex(r);
     var green = rgbToHex(g);
     var blue = rgbToHex(b);
