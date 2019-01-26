@@ -1,5 +1,6 @@
-﻿<!DOCTYPE HTML>
-<html>
+<!DOCTYPE HTML>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="UTF-8">
     <meta name="Viewport" content="width=device-width">
@@ -156,11 +157,11 @@
 <body>
     <div id="main">
         <section id="userinput">
-           <div id="myHeader">Donuts4U</div>
+            <div id="myHeader">Donuts4U</div>
             <hr />
-            
 
-            <form autocomplete="false">
+
+            <form autocomplete="off">
                 <fieldset id="DonutInfo">
                     <legend>About Your Donuts!</legend>
 
@@ -210,7 +211,7 @@
                     <label for="Sprinkles">Sprinkles?</label>
                     <input id="Sprinkles" type="checkbox" name="Sprinkles" value="true" />
                 </fieldset>
-                
+
 
                 <fieldset id="ShippingInfo">
                     <legend>Shipping Address</legend>
@@ -228,22 +229,21 @@
                     <input type="text" name="City" id="City" />
 
                     <label for="State">State:</label>
-                    <input name="State" id="State" type="text"  />
+                    <input name="State" id="State" type="text" />
 
                     <label for="Zip">Zip:</label>
                     <input type="text" name="Zip" id="Zip" placeholder="nnnnn" />
 
                     <label for="Phone">Phone:</label>
-                    <input type="input" name="Phone" id="Phone" placeholder="nnn-nnn-nnnn" />
+                    <input type="text" name="Phone" id="Phone" placeholder="nnn-nnn-nnnn" />
 
                 </fieldset>
+            </form>
 
+        </section>
     </div> <!-- End Main-->
     <br />
     <div><input type="button" id="button" value="Save"></div>
-
-    </form>
-    </section>
 
 
     <section id="orderdetails">
@@ -251,8 +251,6 @@
         <hr />
         <br /><br />
     </section>
-    </div>
-
 
 
 </body>
