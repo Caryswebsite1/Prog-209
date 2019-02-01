@@ -1,0 +1,138 @@
+﻿body
+{
+background-image: url("../images/cardShuffle750.jpg");
+background-size:cover;
+background-repeat:no-repeat;
+
+}
+
+#titleBanner{
+    text-align: center;
+    font-size:36pt;
+    font-weight:700;
+    text-decoration-line:underline;
+    color: red;
+
+}
+
+
+#inputBanner {
+    text-align: center;
+    font-size: 20pt;
+    color: darkgreen;
+    margin-top: 40px;
+    text-shadow: 3px 2px 1px lightgreen;
+}
+
+#Container {
+    
+}
+
+
+/* input array area box*/
+#ArrayInput{
+position: relative;
+width: 490px;
+height: 93px;
+margin: 10px auto 0px auto;
+border: 5px solid darkgreen;
+background-color: rgba(0, 160, 0, 0.35);
+
+}
+
+.labelCell {
+    display: block;
+    position: absolute;
+    width: 60px;
+    height: 20px;
+    border: 1px solid black;
+    background-color:lightgreen;
+}
+
+.inputCell {
+    display: block;
+    position: absolute;
+    width: 80px;
+    height: 20px;
+    border: 1px solid black;
+}
+
+
+#outBanner {
+    text-align: center;
+    font-size: 20pt;
+    color: blue;
+    margin-top: 50px;
+    text-shadow: 3px 2px 1px deepskyblue;
+}
+
+
+#outputContainer {
+    position: relative;
+    width: 490px;
+    height: 93px;
+    margin: 10px auto 0px auto;
+    border: 5px solid darkblue;
+    background-color: rgba(0, 0, 255, 0.35);
+}
+
+.outLabelCell {
+    display: block;
+    position: absolute;
+    width: 60px;
+    height: 20px;
+    border: 1px solid black;
+    background-color: lightgreen;
+}
+
+.outputCell {
+    display: block;
+    position: absolute;
+    width: 80px;
+    height: 20px;
+    border: 1px solid black;
+    background-color:deepskyblue;
+}
+
+
+#buttonHolder {
+    text-align: center;
+    margin-top: 30px;
+}
+
+
+#myError {
+    text-align: center;
+    background-color: white;
+    border: 2px solid red;
+}
+
+button {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    color: black;
+    padding: 2px 10px;
+    border: 1px solid #000;
+    cursor: pointer;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    background: -webkit-linear-gradient(to bottom, #fcfcfc, #d0ced1);
+    background: -moz-linear-gradient(to bottom, #fcfcfc, #d0ced1);
+    background: linear-gradient(to bottom, #fcfcfc, #d0ced1);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+    button:hover {
+        background: -webkit-linear-gradient(to bottom, #acc7a3, #506651);
+        background: -moz-linear-gradient(to bottom, #acc7a3, #506651);
+        background: linear-gradient(to bottom, #acc7a3, #506651);
+    }
+
+    button:active {
+        background: -webkit-radial-gradient(orange 5%, yellow 65%, green 20%);
+        background: -moz-radial-gradient(orange 5%, yellow 65%, green 20%);
+        background: radial-gradient(orange 5%, yellow 65%, green 20%);
+    }
