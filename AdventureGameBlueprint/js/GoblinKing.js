@@ -27,45 +27,64 @@
 // create map
 var map = [];
 
-map[0] = "location 0";
-map[1] = "location 1";
-map[2] = "location 2";
-map[3] = "location 3";
-map[4] = "location 4";
-map[5] = "location 5";
-map[6] = "location 6";
-map[7] = "location 7";
-map[8] = "location 8";
+map[0] = "A glowing gateway blocks the path to the north.";
+map[1] = "An Ice Cave.  The icicles glitter like diamonds in the lantern light.  Rainbows rays of colors shine all around you.";
+map[2] = "Large glowing gems stud the walls and cieling, iluminating the area in a mystical light.";
+map[3] = "The walls and cieling are covered in a strange jelly like substance.";
+map[4] = "Your stomach does flip flops. You feel dizzy. There is a faint blueish haze all around. There are tunnels in each direction";
+map[5] = "A large body of water stretches away from you.  ";
+map[6] = "The glow from the hot lava illuminates the area.  Through the sweat dripping in your eyes you see what appears to be salt deposits scattered around.";
+map[7] = "The roar of water fills your ears.  Spray fills the air.";
+map[8] = "The shallow river flows north.";
 
 // set start location:
 var mapLocation = 0;
 
 // setup the images array
-var locationImages = [];
+const locationImages = [];
 
-locationImages[0] = "anImage0";
-locationImages[1] = "anImage1";
-locationImages[2] = "anImage2";
-locationImages[3] = "anImage3";
-locationImages[4] = "anImage4";
-locationImages[5] = "anImage5";
-locationImages[6] = "anImage6";
-locationImages[7] = "anImage7";
-locationImages[8] = "anImage8";
+locationImages[0] = "images/MagicalGatewayCave.jpg";
+locationImages[1] = "images/iceCave.jpeg";
+locationImages[2] = "images/Amethyst.jpg";
+locationImages[3] = "images/JellyMonsterCaveCropped.jpg";
+locationImages[4] = "images/mazeCave.jpg";
+locationImages[5] = "images/SkullWaterCaveMod.jpg";
+locationImages[6] = "images/LavaCave.jpeg";
+locationImages[7] = "images/WaterfallCave.jpg";
+locationImages[8] = "images/caveRiver.jpg";
+
+
+
+// Other Images:  TheDark, Exit and monsters
+const TheDark = "images/TheDark.png";
+const TheExit = "images/WaterfallExit.jpg";
+const MonsterInDark = "images/MonsterInTheDark.jpg";
+const SeaMonster = "images/SeaMonster.jpg";
 
 // set boundary - blocked ways messages
-var blockedPathMessages = [];
+// multi dim array for different error messages from a location depending on direction attempted. 
+// first index is map location, second is attempted direction:  0 = N, 1 = east, 2 = south, 3 = west
+var blockedPathMessages = [[], [], [], [], [], [], [], [], []]; //  9 multi dim array for different error messages from a location depending on direction attempted. 
+                                
 
-blockedPathMessages[0] = "some blocking msg 0";
-blockedPathMessages[1] = "some blocking msg 1";
-blockedPathMessages[2] = "some blocking msg 2";
-blockedPathMessages[3] = "some blocking msg 3";
-blockedPathMessages[4] = "some blocking msg 4";
-blockedPathMessages[5] = "some blocking msg 5";
-blockedPathMessages[6] = "some blocking msg 6";
-blockedPathMessages[7] = "some blocking msg 7";
-blockedPathMessages[8] = "some blocking msg 8";
-
+blockedPathMessages[0][0] = "The glowing gate seems locked. It won't open.";  // Gate north
+blockedPathMessages[0][2] = "A thick jelly like substance blocks your way.";  // Gate north
+blockedPathMessages[0][3] = "The solid rock cave wall blocks your way.";  // west
+blockedPathMessages[1][0] = "Thick ice blocks the way.";  // north
+blockedPathMessages[2][0] = "The gem studded sold rock wall blocks your way.";  // north
+blockedPathMessages[2][1] = "The gem studded sold rock wall blocks your way.";  // east
+blockedPathMessages[3][0] = "The thick jelly like substance blocks your way."; // north
+blockedPathMessages[3][1] = "The thick jelly like substance blocks your way."; // east
+blockedPathMessages[3][3] = "The solid rock cave wall blocks your way.";      // west
+blockedPathMessages[4][3] = "A thick jelly like substance blocks your way."; // west.
+blockedPathMessages[5][1] = "The solid rock cave wall blocks your way."; // east
+blockedPathMessages[6][2] = "Hot lava pours from the wall and covers the floor blocking the way."; // south
+blockedPathMessages[6][3] = "Hot lava pours from the wall and covers the floor blocking the way."; // west
+blockedPathMessages[7][1] = "The cliff is too high.  You can't go that way. Too bad you don't have a rope with a grappling hook!";  // East without a rope.
+blockedPathMessages[7][2] = "The solid rock cave wall blocks your way.";  // south
+blockedPathMessages[8][1] = "The solid rock cave wall blocks your way."; // east
+blockedPathMessages[8][2] = "The solid rock cave wall blocks your way."; // south
+blockedPathMessages[8][3] = "The cliff is too high.  You can't go that way. Too bad you don't have a rope with a grappling hook!";  // west without rope and grapling hook.
 
 // create an array for the items that are in the world at the start and set their locations
 // note: this itemsInWorld array will shrink as the player takes the items or grow as they drop the items.
@@ -89,9 +108,14 @@ var action = "";
 
 // another item array to hold all the items the game understands
 // initially this is the same as the itemsInWorld.
-var itemsIKnow = ["item0", "item1", "item2", "item3", "item4", "item5", "item6", "item7", "item8", "item9"];
+var itemsIKnow = ["salt", "rope", "grappling hook", "plate armor", "sword", "lantern", "pick axe", "glowing gem", "item8", "item9"];
 var currentItem = "";  // the current item being actioned
 
+
+// FLAGS for items and monsters
+var bLanternInUse = false;  // lamp must be on to be able to see anything...
+var bJellyMonsterAlive = true;  // must kill to get grappling hook
+var bMonsterInDarkAlive = true; // must kill to get pick axe.
 
 
 /* *********************************************************************
@@ -99,7 +123,7 @@ var currentItem = "";  // the current item being actioned
  *  ********************************************************************* */
 
 // the image element for the display of the image on the page:
-var screenImage = document.querySelector("img");
+var screenImage = document.getElementById("screenImage");
 
 // the input and output fields too.
 var input = document.querySelector("#input");
@@ -142,18 +166,24 @@ function init() {
     // init main game state variables.  we can also call init from newGame button handler
     // and it will reset the world.
 
+
+    // Reset FLAGS for items and monsters
+    bLanternInUse = false;  // lamp must be on to be able to see anything...
+    bJellyMonsterAlive = true;  // must kill to get grappling hook
+    bMonsterInDarkAlive = true; // must kill to get pick axe.
+
     // set start location:
-    mapLocation = 0;
+    mapLocation = 7;
 
     // create an array for the items that are in the world at the start and set their locations
     // note: this itemsInWorld array will shrink as the player takes the items or grow as they drop the items.
-    itemsInWorld = ["item0", "item1", "item2", "item3", "item4", "item5", "item6", "item7", "item8", "item9"];
+    itemsInWorld = ["salt", "rope", "grappling hook", "plate armor", "sword", "pick axe", "glowing gem"];
 
     // note: location index == item index.  value == map index
-    itemLocations = [0, 0, 1, 3, 8, 1, 6, 8, 4, 5];
+    itemLocations = [6, 0, 3, 8, 4, 1, 2];
 
     // backpack!
-    backpack = [];
+    backpack = ["lantern"];
 
     playersInput = "";
     gameMessage = "";
@@ -209,6 +239,7 @@ function playGame() {
 
     // In case the player is doing an item action, determine which item
     loopEnd = itemsIKnow.length;  // reset loopEnd
+    console.log("loopEnd for items is: " + loopEnd);
 
     for (i = 0; i < loopEnd; i++) {
         if (playersInput.indexOf(itemsIKnow[i]) !== -1) {
@@ -223,40 +254,112 @@ function playGame() {
     switch (action) {
         case "north":
             if (mapLocation >= 3) {
-                mapLocation -= 3;
-            }
-            else {
-                gameMessage = blockedPathMessages[mapLocation];
+                switch (mapLocation) {
+                    case 3: // jelly monster
+                        if (bJellyMonsterAlive) {
+                            gameMessage = blockedPathMessages[3][0]; // jelly monster.
+                        }
+                        else {
+                            mapLocation -= 3;
+                        }
+                        break;
+
+                    default:
+                        mapLocation -= 3;
+                }
+            }// end if location >= 3
+            else{  // northmost locations
+                gameMessage = blockedPathMessages[mapLocation][0];
             }
             break;
 
 
         case "east":
-            if (mapLocation % 3 != 2) {
-                mapLocation += 1;
-            }
+            if (mapLocation % 3 != 2) {  // if not eastmost locations..
+                switch (mapLocation) {
+                    case 3:  // jelly monster
+                        if (bJellyMonsterAlive) {
+                            gameMessage = blockedPathMessages[3][1]; // jelly monster.
+                        }
+                        else {
+                            mapLocation += 1;
+                        }
+                        break;
+
+                    case 7: // cliff - need rope and grappling hook.
+                        if ((backpack.indexOf("rope") === -1) || (backpack.indexOf("grappling hook") === -1) ) // no rope w grappling hook
+                        {
+                            gameMessage = blockedPathMessages[7][1];
+                        }
+                        else {
+                            gameMessage = "You used the rope and grappling hook to repell down the cliff.";
+                            mapLocation += 1;
+                        } // end else have rope and grappling hook
+                        break;
+
+                    default:
+                        mapLocation += 1;
+                }// end switch maplocation for east
+              
+            }// end if not eastmost
             else {
-                gameMessage = blockedPathMessages[mapLocation];
+                gameMessage = blockedPathMessages[mapLocation][1];  // east way blocked
             }
             break;
 
 
         case "south":
-            if (mapLocation < 6) {
-                mapLocation += 3;
-            }
+            if (mapLocation < 6) {  // if not southmost location
+                switch (mapLocation) {
+                    case 0:  // jelly monster
+                        if (bJellyMonsterAlive) {
+                            gameMessage = blockedPathMessages[0][2]; // jelly monster.
+                        }
+                        else {
+                            mapLocation += 3;
+                        }
+                        break;
+
+                    default: 
+                        mapLocation += 3;
+                }// end switch location if < 6
+
+            }// end if not southmost
             else {
-                gameMessage = blockedPathMessages[mapLocation];
+                gameMessage = blockedPathMessages[mapLocation][2];
             }
             break;
 
 
         case "west":
-            if (mapLocation % 3 != 0) {
-                mapLocation -= 1;
-            }
+            if (mapLocation % 3 != 0) { // if not west most.
+                switch (mapLocation) {
+                    case 4:  // jelly monster
+                        if (bJellyMonsterAlive) {
+                            gameMessage = blockedPathMessages[4][3]; // jelly monster.
+                        }
+                        else {
+                            mapLocation -= 1;
+                        }
+                        break;
+
+                    case 8:  // cliff
+                        if ((backpack.indexOf("rope") === -1) || (backpack.indexOf("grappling hook") === -1)) // no rope w grappling hook
+                        {
+                            gameMessage = blockedPathMessages[8][3]; // cliff
+                        }
+                        else {
+                            mapLocation -= 1;
+                        }
+                        break;
+
+                    default:
+                        mapLocation -= 1;
+                }// end switch location if < 6
+
+            }// end if not west most
             else {
-                gameMessage = blockedPathMessages[mapLocation];
+                gameMessage = blockedPathMessages[mapLocation][3];
             }
             break;
 
@@ -445,6 +548,9 @@ function useItem() {
     // If the item can't be used at this location, or is not in the backpack, display appropriate
     // error messages. 
 
+    console.log("in useItem.  Current Item is: " + currentItem);
+    // currently known items: "Salt", "Rope", "Grappling Hook", "Plate Armor", "Sword", "Lantern", "Pick Axe", "Glowing Gem"
+
     var bItemUsedUp = false;  // bool for if item is destroyed.
     var bItemPlaced = false;  // bool for if item is placed in world by using.
 
@@ -458,12 +564,12 @@ function useItem() {
             // ok it exists in backpack.  Figure out if it can be used and how.
             switch (currentItem) {
 
-                case "item0":  // item can be used anywhere...
+                case "salt":  // item can be used anywhere...
                     gameMessage = "using " + currentItem + ".";
                     break;
 
 
-                case "item1":
+                case "rope":
                     if (mapLocation === 3) {
                         gameMessage = "Successfully solved location 3 using " + currentItem + ".";
                     }
@@ -473,7 +579,7 @@ function useItem() {
                     break;
 
 
-                case "item2":
+                case "grappling hook":
                     if (mapLocation === 5) {
                         gameMessage = "Successfully solved location 5 using " + currentItem + ".  Item is used up.";
                         bItemUsedUp = true;
@@ -484,7 +590,7 @@ function useItem() {
                     break;
 
 
-                case "item3":
+                case "plate armor":
                     if (mapLocation === 8) {
                         gameMessage = "Successfully solved location 8 using " + currentItem + ".  Item is placed in world.";
                         bItemPlaced = true;
@@ -495,22 +601,24 @@ function useItem() {
                     break;
 
 
-                case "item4":
+                case "sword":
                     gameMessage = "using " + currentItem + ".";
                     break;
 
 
-                case "item5":
+                case "lantern":
+                    gameMessage = "You Light your " + currentItem + ".";
+                    bLanternInUse = true;  // set flag to show lantern is being used.
+                    console.log("lantern being used");
+                    break;
+
+
+                case "pick axe":
                     gameMessage = "using " + currentItem + ".";
                     break;
 
 
-                case "item6":
-                    gameMessage = "using " + currentItem + ".";
-                    break;
-
-
-                case "item7":
+                case "glowing gem":
                     gameMessage = "using " + currentItem + ".";
                     break;
 
@@ -566,27 +674,39 @@ function useItem() {
 //-----------------------------------------------------
 function renderGame() {
 
-    // show location image and id
-    screenImage.src = "../images/" + locationImages[mapLocation];
-    output.innerHTML = map[mapLocation];
+    // IF the lantern is not on,  and not in a location with a light source, then player only sees the black!
+    if (!bLanternInUse && mapLocation != 6 && mapLocation != 2 && mapLocation != 0) {
+        screenImage.src = TheDark;
+        gameMessage = "It is pitch black.  You can't see anything.";
+        console.log("in dark if.  screenImage.src is: " + screenImage.src);
+    }
+    else // lantern is on
+    {
+        // You can see!  show image and discription
+        screenImage.src = locationImages[mapLocation];
+        output.innerHTML = map[mapLocation];
 
-    var i = 0;
-    //show items if they are there at this location
-    for (i = 0; i < itemsInWorld.length; i++) {
-        if (mapLocation === itemLocations[i]) {
-            // display item
-            output.innerHTML += "<br> You see a <strong>" + itemsInWorld[i] + "</strong> here.";
-        }
-    }// end for i
+
+        var i = 0;
+        //show items if they are there at this location
+        for (i = 0; i < itemsInWorld.length; i++) {
+            if (mapLocation === itemLocations[i]) {
+                // display item
+                output.innerHTML += "<br> You see a <strong>" + itemsInWorld[i] + "</strong> here.";
+            }
+        }// end for i
+    }// end else lantern IS on
 
     // display game message 
     output.innerHTML += "<br> <em> " + gameMessage + " </em> ";
+
 
     // finally show players backpack contents:
     if (backpack.length != 0) {
         output.innerHTML += "<br> You are carrying: " + backpack.join(",");
     }
 
+    console.log("at end of render.   screenImage.src is: " + screenImage.src);
 }// end renderGame
 
 //-----------------------------------------------------
@@ -607,10 +727,10 @@ function saveGame() {
         itemLocations: itemLocations,  // location of the items in the world
         backpack: backpack  // whats in the backpack 
     }
-    
+
     // stringify it all then save in local storage
     var dataString = JSON.stringify(gameStateObject);
-   
+
     // now save to local storage
     localStorage.setItem("GoblinKingGameData", dataString);
 
@@ -636,7 +756,7 @@ function loadGame() {
 
     console.log("Loaded gamedata: " + tempString);
 
-    gameStateObject = JSON.parse(tempString); 
+    gameStateObject = JSON.parse(tempString);
     console.log("Gamestate Object after parse: " + gameStateObject);
 
     // now get data from state object
