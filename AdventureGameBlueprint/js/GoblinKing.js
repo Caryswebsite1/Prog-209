@@ -69,10 +69,10 @@ blockedPathMessages[8] = "some blocking msg 8";
 
 // create an array for the items that are in the world at the start and set their locations
 // note: this itemsInWorld array will shrink as the player takes the items or grow as they drop the items.
-var itemsInWorld = ["item0", "item1", "item2", "item3", "item4", "item5", "item6", "item7", "item8", "item9"];
+var itemsInWorld = [];
 
 // note: location index == item index.  value == map index
-var itemLocations = [0, 0, 1, 3, 8, 1, 6, 8, 4, 5];
+var itemLocations = [];
 
 // backpack!
 var backpack = [];
@@ -139,6 +139,32 @@ window.addEventListener("load", init);  // force call to init function on load o
 //-----------------------------------------------------
 function init() {
 
+    // init main game state variables.  we can also call init from newGame button handler
+    // and it will reset the world.
+
+    // set start location:
+    mapLocation = 0;
+
+    // create an array for the items that are in the world at the start and set their locations
+    // note: this itemsInWorld array will shrink as the player takes the items or grow as they drop the items.
+    itemsInWorld = ["item0", "item1", "item2", "item3", "item4", "item5", "item6", "item7", "item8", "item9"];
+
+    // note: location index == item index.  value == map index
+    itemLocations = [0, 0, 1, 3, 8, 1, 6, 8, 4, 5];
+
+    // backpack!
+    backpack = [];
+
+    playersInput = "";
+    gameMessage = "";
+
+    input.innerHTML = "";
+    input.value = "";
+    output.innerHTML = "";
+    output.value = "";
+
+
+    // now that everything is set, display everything.
     renderGame();
 
 } // end function init
@@ -562,3 +588,89 @@ function renderGame() {
     }
 
 }// end renderGame
+
+//-----------------------------------------------------
+//  saveGame:
+//       Called by button handler 
+//       
+//       Gathers all gamestate related variables, converts to text
+//       in Json format and saves to local storage.
+//
+//-----------------------------------------------------
+function saveGame() {
+
+    // create an object to put into JSON.stringify(obj);
+    // temp gameStateObject
+    var gameStateObject = {
+        mapLocation: mapLocation,    // location
+        itemsInWorld: itemsInWorld,   // items in the world
+        itemLocations: itemLocations,  // location of the items in the world
+        backpack: backpack  // whats in the backpack 
+    }
+    
+    // stringify it all then save in local storage
+    var dataString = JSON.stringify(gameStateObject);
+   
+    // now save to local storage
+    localStorage.setItem("GoblinKingGameData", dataString);
+
+}// end saveGame
+
+
+//-----------------------------------------------------
+//  loadGame:
+//       Called by button handler 
+//       
+//       Gets gameStateObject from local storage and puts
+//       into appropriate game data structures.
+//
+//-----------------------------------------------------
+function loadGame() {
+
+    // temp gameStateObject
+    var gameStateObject = null;
+
+    var tempString = "";
+    // get state object from local storage
+    tempString = localStorage.getItem("GoblinKingGameData");
+
+    console.log("Loaded gamedata: " + tempString);
+
+    gameStateObject = JSON.parse(tempString); 
+    console.log("Gamestate Object after parse: " + gameStateObject);
+
+    // now get data from state object
+    mapLocation = gameStateObject.mapLocation;
+    console.log("mapLocation: " + gameStateObject.mapLocation);
+
+    itemsInWorld = gameStateObject.itemsInWorld;
+    console.log("itemsInWorld: " + gameStateObject.itemsInWorld);
+
+    itemLocations = gameStateObject.itemLocations;
+    console.log("itemLocations: " + gameStateObject.itemLocations);
+
+    backpack = gameStateObject.backpack;
+    console.log("backpack: " + gameStateObject.backpack);
+
+    // now redisplay game
+    renderGame();
+
+}// end loadGame
+
+
+
+
+//-----------------------------------------------------
+//  newGame:
+//       Called by button handler 
+//       
+//       Reinitializes and restarts game
+//
+//-----------------------------------------------------
+function newGame() {
+
+    // just call init
+    init();
+
+}// end loadGame
+
