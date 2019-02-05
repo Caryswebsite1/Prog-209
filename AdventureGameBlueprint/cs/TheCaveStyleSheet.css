@@ -1,0 +1,30 @@
+﻿
+
+
+/* set up the main viewscreen image.*/
+
+/*
+#imageContainer{
+    padding:20px;
+    margin-top: 50px;
+}
+*/
+
+
+/*
+    background-size: cover;
+    background-repeat:no-repeat;
+ 
+
+}  */
+
+
+
+
+img {
+    display:block;
+    width: 100%;
+    height: auto;
+    border: 20px ridge gold;
+    margin:0px auto;
+}
