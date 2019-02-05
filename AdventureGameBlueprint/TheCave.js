@@ -37,8 +37,9 @@ map[6] = "The glow from the hot lava illuminates the area.  Through the sweat dr
 map[7] = "The roar of water fills your ears.  Spray fills the air.";
 map[8] = "The shallow river flows north.";
 
-// set start location:
+// set start location and previous location:
 var mapLocation = 0;
+var previousMapLocation = 0;
 
 // setup the images array
 const locationImages = [];
@@ -60,12 +61,13 @@ const TheDark = "url(images/TheDark.png)";
 const TheExit = "url(images/WaterfallExit.jpg)";
 const MonsterInDark = "url(images/MonsterInTheDark.jpg)";
 const SeaMonster = "url(images/SeaMonster.jpg)";
+const Drowned = "url(images/drowned.jpg)";
 
 // set boundary - blocked ways messages
 // multi dim array for different error messages from a location depending on direction attempted. 
 // first index is map location, second is attempted direction:  0 = N, 1 = east, 2 = south, 3 = west
 var blockedPathMessages = [[], [], [], [], [], [], [], [], []]; //  9 multi dim array for different error messages from a location depending on direction attempted. 
-                                
+
 
 blockedPathMessages[0][0] = "The glowing gate seems locked. It won't open.";  // Gate north
 blockedPathMessages[0][2] = "A thick jelly like substance blocks your way.";  // Gate north
@@ -116,6 +118,7 @@ var currentItem = "";  // the current item being actioned
 var bLanternInUse = false;  // lamp must be on to be able to see anything...
 var bJellyMonsterAlive = true;  // must kill to get grappling hook
 var bMonsterInDarkAlive = true; // must kill to get pick axe.
+var endGameReason = "";  // loaded with reason for end game so correct messages can be shown.??
 
 
 /* *********************************************************************
@@ -171,9 +174,25 @@ function init() {
     bLanternInUse = false;  // lamp must be on to be able to see anything...
     bJellyMonsterAlive = true;  // must kill to get grappling hook
     bMonsterInDarkAlive = true; // must kill to get pick axe.
+    endGameReason = "";  // game not ended
+
+    // make sure input box is visable and operational
+    input.hidden = false;
+    input.disabled = false;
+
+
+    // make sure buttons are visable and operational
+    playButton.disabled = false;
+    playButton.hidden = false;
+    saveButton.disabled = false;
+    saveButton.hidden = false;
+    loadButton.disabled = false;
+    newGameButton.disabled = false;
+
 
     // set start location:
     mapLocation = 7;
+    previousMapLocation = 7;
 
     // create an array for the items that are in the world at the start and set their locations
     // note: this itemsInWorld array will shrink as the player takes the items or grow as they drop the items.
@@ -214,6 +233,13 @@ function playGame() {
     gameMessage = "";
     action = "";
     currentItem = "";
+
+    // make sure all buttons are enabled.
+    playButton.disabled = false;
+    saveButton.disabled = false;
+    loadButton.disabled = false;
+    newGameButton.disabled = false;
+
 
     // get player input and convert to lower case since 
     // that's how we have everything in our arrays
@@ -260,15 +286,39 @@ function playGame() {
                             gameMessage = blockedPathMessages[3][0]; // jelly monster.
                         }
                         else {
+                            previousMapLocation = mapLocation;
                             mapLocation -= 3;
                         }
                         break;
 
+                    case 5: // might be swimming the lake...
+                        if (previousMapLocation != 2) {  // you are NOT just returning from whence you came...
+                            // you are attempting to swim lake....
+
+                            if (!swimLake()) {
+                                // if dont make it accross lake then do nothing. 
+                                // function already set up messages.
+                            }// end just swim it
+                            else {
+                                // made it!
+                                previousMapLocation = mapLocation;
+                                mapLocation -= 3;
+                            }
+                        }// end if you are not returning from where you came from.
+                        else {
+                            // you are returning from whence you came.
+                            previousMapLocation = mapLocation;
+                            mapLocation -= 3;
+                        }
+                        break;
+
+
                     default:
+                        previousMapLocation = mapLocation;
                         mapLocation -= 3;
                 }
             }// end if location >= 3
-            else{  // northmost locations
+            else {  // northmost locations
                 gameMessage = blockedPathMessages[mapLocation][0];
             }
             break;
@@ -282,25 +332,28 @@ function playGame() {
                             gameMessage = blockedPathMessages[3][1]; // jelly monster.
                         }
                         else {
+                            previousMapLocation = mapLocation;
                             mapLocation += 1;
                         }
                         break;
 
                     case 7: // cliff - need rope and grappling hook.
-                        if ((backpack.indexOf("rope") === -1) || (backpack.indexOf("grappling hook") === -1) ) // no rope w grappling hook
+                        if ((backpack.indexOf("rope") === -1) || (backpack.indexOf("grappling hook") === -1)) // no rope w grappling hook
                         {
                             gameMessage = blockedPathMessages[7][1];
                         }
                         else {
                             gameMessage = "You used the rope and grappling hook to repell down the cliff.";
+                            previousMapLocation = mapLocation;
                             mapLocation += 1;
                         } // end else have rope and grappling hook
                         break;
 
                     default:
+                        previousMapLocation = mapLocation;
                         mapLocation += 1;
                 }// end switch maplocation for east
-              
+
             }// end if not eastmost
             else {
                 gameMessage = blockedPathMessages[mapLocation][1];  // east way blocked
@@ -316,11 +369,35 @@ function playGame() {
                             gameMessage = blockedPathMessages[0][2]; // jelly monster.
                         }
                         else {
+                            previousMapLocation = mapLocation;
                             mapLocation += 3;
                         }
                         break;
 
-                    default: 
+
+                    case 5: // might be swimming the lake...
+                        if (previousMapLocation != 8) {  // you are NOT just returning from whence you came...
+                            // you are attempting to swim lake....
+
+                            if (!swimLake()) {
+                                // if dont make it accross lake then do nothing. 
+                                // function already set up messages.
+                            }// end just swim it
+                            else {
+                                // made it!
+                                previousMapLocation = mapLocation;
+                                mapLocation += 3;
+                            }
+                        }// end if you are not returning from where you came from.
+                        else {
+                            // you are returning from whence you came.
+                            previousMapLocation = mapLocation;
+                            mapLocation += 3;
+                        }
+                        break;
+
+                    default:
+                        previousMapLocation = mapLocation;
                         mapLocation += 3;
                 }// end switch location if < 6
 
@@ -339,9 +416,32 @@ function playGame() {
                             gameMessage = blockedPathMessages[4][3]; // jelly monster.
                         }
                         else {
+                            previousMapLocation = mapLocation;
                             mapLocation -= 1;
                         }
                         break;
+
+                    case 5: // might be swimming the lake...
+                        if (previousMapLocation != 4) {  // you are NOT just returning from whence you came...
+                            // you are attempting to swim lake....
+
+                            if (!swimLake()) {
+                                // if dont make it accross lake then do nothing. 
+                                // function already set up messages.
+                            }// end just swim it
+                            else {
+                                // made it!
+                                previousMapLocation = mapLocation;
+                                mapLocation -= 1;
+                            }
+                        }// end if you are not returning from where you came from.
+                        else {
+                            // you are returning from whence you came.
+                            previousMapLocation = mapLocation;
+                            mapLocation -= 1;
+                        }
+                        break;
+
 
                     case 8:  // cliff
                         if ((backpack.indexOf("rope") === -1) || (backpack.indexOf("grappling hook") === -1)) // no rope w grappling hook
@@ -349,11 +449,13 @@ function playGame() {
                             gameMessage = blockedPathMessages[8][3]; // cliff
                         }
                         else {
+                            previousMapLocation = mapLocation;
                             mapLocation -= 1;
                         }
                         break;
 
                     default:
+                        previousMapLocation = mapLocation;
                         mapLocation -= 1;
                 }// end switch location if < 6
 
@@ -674,40 +776,89 @@ function useItem() {
 //-----------------------------------------------------
 function renderGame() {
 
-    // IF the lantern is not on,  and not in a location with a light source, then player only sees the black!
-    if (!bLanternInUse && mapLocation != 6 && mapLocation != 2 && mapLocation != 0) {
-        screenImage.style.backgroundImage = TheDark;
-        gameMessage = "It is pitch black.  You can't see anything.";
-        console.log("in dark if.  screenImage is: " + screenImage.style.backgroundImage);
-    }
-    else // lantern is on
-    {
-        // You can see!  show image and discription
-        screenImage.style.backgroundImage = locationImages[mapLocation];
-        output.innerHTML = map[mapLocation];
+    // if endGameReason length is not <=1 then we had an end game situation.
+    if (endGameReason.length > 1) {
+        // end game!
+        switch (endGameReason) {
+            case "SeaMonster": // got eaten by seamonster.
+                output.innerHTML = "You try to swim across to the other side.   ALAS!  A Sea Monster ATE YOU!! <br> GAME OVER";
+                screenImage.style.backgroundImage = SeaMonster;
+                break;
+
+            case "armor drowned": // armor too heavy and you drowned
+                output.innerHTML = "You try to swim across to the other side.  ALAS! The armor you have drags you under and you drown! <br> GAME OVER";
+                screenImage.style.backgroundImage = Drowned;
+                break;
+
+            case "MonsterInDark":
+                output.innerHTML = "The Monster lurking in the dark EATS YOU!!  <br>   GAME OVER";
+                screenImage.style.backgroundImage = MonsterInDark;
 
 
-        var i = 0;
-        //show items if they are there at this location
-        for (i = 0; i < itemsInWorld.length; i++) {
-            if (mapLocation === itemLocations[i]) {
-                // display item
-                output.innerHTML += "<br> You see a <strong>" + itemsInWorld[i] + "</strong> here.";
-            }
-        }// end for i
-    }// end else lantern IS on
+            case "Reached Exit":
+                output.innerHTML = "Freash air fills your lungs as the outside breaze flows over you!  You made it!  <br>  GAME OVER";
+                screenImage.style.backgroundImage = TheExit;
 
-    // display game message 
-    output.innerHTML += "<br> <em> " + gameMessage + " </em> ";
+        }// end switch endgame
+
+        // disable and hide all buttons except load and new game.
+        playButton.disabled = true;
+        playButton.hidden = true;
+        saveButton.disabled = true;
+        saveButton.hidden = true;
+        loadButton.disabled = false;
+        newGameButton.disabled = false;
+
+        // disable input box  and hide it
+        input.hidden = true;
+        input.disabled = true;
 
 
-    // finally show players backpack contents:
-    if (backpack.length != 0) {
-        output.innerHTML += "<br> You are carrying: " + backpack.join(",");
-    }
+    }// end if end game
+    else {
+        // Not ending Game.  Continue on!
+
+
+        // IF the lantern is not on,  and not in a location with a light source, then player only sees the black!
+        if (!bLanternInUse && mapLocation != 6 && mapLocation != 2 && mapLocation != 0) {
+            screenImage.style.backgroundImage = TheDark;
+            gameMessage = "It is pitch black.  You can't see anything.";
+            console.log("in dark if.  screenImage is: " + screenImage.style.backgroundImage);
+        }
+        else // lantern is on
+        {
+            // You can see!  show image and discription
+            screenImage.style.backgroundImage = locationImages[mapLocation];
+            output.innerHTML = map[mapLocation];
+
+
+            var i = 0;
+            //show items if they are there at this location
+            for (i = 0; i < itemsInWorld.length; i++) {
+                if (mapLocation === itemLocations[i]) {
+                    // display item
+                    output.innerHTML += "<br> You see a <strong>" + itemsInWorld[i] + "</strong> here.";
+                }
+            }// end for i
+        }// end else lantern IS on
+
+        // display game message 
+        output.innerHTML += "<br> <em> " + gameMessage + " </em> ";
+
+
+        // finally show players backpack contents:
+        if (backpack.length != 0) {
+            output.innerHTML += "<br> You are carrying: " + backpack.join(",");
+        }
+
+
+    }// end else not end game.
 
     console.log("at end of render.   screenImage is: " + screenImage.style.backgroundImage);
 }// end renderGame
+
+
+
 
 //-----------------------------------------------------
 //  saveGame:
@@ -723,9 +874,15 @@ function saveGame() {
     // temp gameStateObject
     var gameStateObject = {
         mapLocation: mapLocation,    // location
+        previousMapLocation: previousMapLocation,  // previous location
         itemsInWorld: itemsInWorld,   // items in the world
         itemLocations: itemLocations,  // location of the items in the world
-        backpack: backpack  // whats in the backpack 
+        backpack: backpack,  // whats in the backpack 
+        bLanternInUse: bLanternInUse,  // lamp must be on to be able to see anything...
+        bJellyMonsterAlive: bJellyMonsterAlive,  // must kill to get grappling hook
+        bMonsterInDarkAlive: bMonsterInDarkAlive, // must kill to get pick axe.
+        endGameReason: endGameReason  // game not ended
+
     }
 
     // stringify it all then save in local storage
@@ -763,6 +920,10 @@ function loadGame() {
     mapLocation = gameStateObject.mapLocation;
     console.log("mapLocation: " + gameStateObject.mapLocation);
 
+    // previous location
+    previousMapLocation = gameStateObject.previousMapLocation;
+    console.log("previousMapLocation: " + gameStateObject.previousMapLocation);
+
     itemsInWorld = gameStateObject.itemsInWorld;
     console.log("itemsInWorld: " + gameStateObject.itemsInWorld);
 
@@ -772,11 +933,38 @@ function loadGame() {
     backpack = gameStateObject.backpack;
     console.log("backpack: " + gameStateObject.backpack);
 
+    // flags
+    bLanternInUse = gameStateObject.bLanternInUse;
+    console.log("bLanternInUse: " + gameStateObject.bLanternInUse);
+
+    bJellyMonsterAlive = gameStateObject.bJellyMonsterAlive;
+    console.log("bJellyMonsterAlive: " + gameStateObject.bJellyMonsterAlive);
+
+    bMonsterInDarkAlive = gameStateObject.bMonsterInDarkAlive;
+    console.log("bMonsterInDarkAlive: " + gameStateObject.bMonsterInDarkAlive);
+
+    endGameReason = gameStateObject.endGameReason;
+    console.log("endGameReason: " + gameStateObject.endGameReason);
+
+
+    // make sure all buttons available if not end of game.
+    if (endGameReason.length < 2) {
+        playButton.disabled = false;
+        playButton.hidden = false;
+        saveButton.disabled = false;
+        saveButton.hidden = false;
+        loadButton.disabled = false;
+        newGameButton.disabled = false;
+    }
+   
+    // make sure input box is visable and operational
+    input.hidden = false;
+    input.disabled = false;
+
     // now redisplay game
     renderGame();
 
 }// end loadGame
-
 
 
 
@@ -793,4 +981,67 @@ function newGame() {
     init();
 
 }// end loadGame
+
+
+
+//-----------------------------------------------------
+//  swimLake:
+//       Called by playgame, in action resolution 
+//       
+//       determines if player successfully swims lake
+//
+//-----------------------------------------------------
+function swimLake() {
+
+    var monsterChance = 50; // chance for seamonster to eat you.
+    var swimChance = 75;   // chance for player to successfully swim it.
+    var swimRoll = myRandom(100);  // roll to see if monster eats you!
+    var bSuccess = false;
+
+    if (swimRoll > monsterChance) { // sea Monster eats you!
+        endGameReason = "SeaMonster";
+    }
+    else {
+        swimRoll = myRandom(100);  // roll again to see if you can swim it
+
+        if (backpack.indexOf("armor") != -1) { // ugg, you are weighed down with armor!
+            swimChance = 25;  // armor weighs you down
+            if ((swimRoll - 50) > swimChance) // you drown!
+            {
+                endGameReason = "armor drowning";
+            }
+        }// end if armor
+        else {
+            // just trying to swim it unencombered and no monster attack
+            if (swimRoll > swimChance) {
+                // had to turn back.  
+                gameMessage = "The water was too much for you.  You had to turn back before you drowned!";
+            }
+            else {
+                bSuccess = true; // player swam it!
+            }
+        }// end else just swim unencumbered
+    }// end else monster did not eat you so try to swim
+
+    return bSuccess;
+
+}// end swimLake
+
+
+
+
+//-----------------------------------------------------
+//  myRandom(inNumber)
+//       Called to get random number from 1 to number given
+//       returns the number.
+//      
+//
+//-----------------------------------------------------
+function myRandom(inNumber) {
+
+    let randNum = Math.floor(Math.random() * inNumber) + 1;
+
+    return randNum;
+
+}// end myRandom
 
