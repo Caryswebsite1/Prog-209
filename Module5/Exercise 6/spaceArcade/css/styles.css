@@ -82,24 +82,25 @@ button:hover {
 #torpedo {
 	position: absolute;
 
-	/* transition */
-	-webkit-transition: left 0.5s ease-out 0s;
-	-moz-transition: left 0.5s ease-out 0s;
-	transition: left 0.5s ease-out 0s;
+	/* transition NOTE:  I sped it up from 0.5 to 0.3*/
+	-webkit-transition: left 0.3s ease-out 0s;
+	-moz-transition: left 0.3s ease-out 0s;
+	transition: left 0.3s ease-out 0s;
 }
 #ufo {
     position: absolute;
     display: none;
     top: 100px;
     left: 30px;
-
     /* explosion transition: in js, after we shift to the explosion image, 
         we move image left 1 px to cause this
         code to come into play.  it might work...
-    */
+    
     -webkit-transition: left 0.5s ease-out 0s;
     -moz-transition: left 0.5s ease-out 0s;
     transition: left 0.5s ease-out 0s;
+
+        */
 }
 #gameUI {
 	width: 560px;
