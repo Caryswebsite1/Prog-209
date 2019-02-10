@@ -54,9 +54,12 @@ let ufoVelocity = 4;
 
 let photon = "audio/PhotonTorp.mp3";
 let phaser = "audio/phasertype10.wav";
+const EXPLODE = "audio/Explosion.mp3";
+
 
 let bGameEnded = false;  // my game end flag
 let bUfoExplode = false;  // my ufoExplodes flag
+let bExplosionAudio = false;  // flag for if we have sounded the explosion
 
 // add event listeners
 START_BTN.addEventListener("click", startGameHandler, false);
@@ -201,7 +204,11 @@ function checkExplode() {
 
         render();// make sure explosion is appreciated...
         console.log("in checkExplode.  Setting delay for hidding ufo explosion.");
+     
+        // wait so player can see
         wait(EXPLODE_TIMEINTERVAL);
+
+        // now hide ufo since it's been blown up!
         ufo.img.style.visibility = "hidden";
         console.log('in checkExplode.  past time delay now.');
         bGameEnded = true;
@@ -299,7 +306,22 @@ function render() {
 
     if (bUfoExplode) {
         ufo.img.src = "images/ExplodeMaybe.png";
-    }
+
+        if (!bExplosionAudio) {
+            // if we have yet to sound the explosion, do so now.
+
+            // set up audio
+            let myAudio = document.createElement("audio");
+            myAudio.src = EXPLODE;
+            console.log("src = " + myAudio.src);
+            myAudio.volume = 0.5;
+            myAudio.play();
+
+            bExplosionAudio = true;
+        }// end if need to sound explosion
+
+    }// end if ufoExplode
+
     ufo.img.style.top = ufo.y + "px";
     ufo.img.style.left = ufo.x + "px";
     ufo.img.style.visibility = "visible"; // make sure the ufo shows up or explodes.
