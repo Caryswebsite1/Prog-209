@@ -218,7 +218,7 @@ function checkExplode() {
 
 
 //----------------------------------------------------------------------------------------
-// wait(delayTime):  
+// wait(delayTime):  implemented as an "arrow function" 
 //
 //  Called by checkExplode
 //  delayTime:  in milliseconds.
@@ -226,7 +226,8 @@ function checkExplode() {
 //  Forces cpu to do nothing but check time until specified delayTime has passed.
 //
 //-----------------------------------------------------------------------------------------
-function wait(milliSecDelay) {
+//function wait(milliSecDelay) {
+let wait = (milliSecDelay) => {
     "use strict";
 
     let startTime = new Date();
@@ -237,7 +238,7 @@ function wait(milliSecDelay) {
         currentTime = new Date();
     }
     while ( (currentTime - startTime) < milliSecDelay);
-}
+} // end wait
 
 
 
@@ -337,8 +338,6 @@ function render() {
         torpedo.img.style.top = (rocket.y + 8) + "px";
         torpedo.img.style.visibility = "hidden";
     }// end if not in fire torp sequence
-
-
 
     if (bGameEnded) {
         // end of game, let player know
