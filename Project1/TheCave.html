@@ -14,35 +14,116 @@
 <body>
 
 
-    <!-- <img src="images/WaterfallCave400.jpg" width="100" height="100" alt="Sugar Cookies!" />  -->
+    <section id="introScreen">
+        <div id="introTitle">THE CAVE</div>
+
+        <img id="introImage" src="images/introCave1_200H.jpg" alt="intro image">
+        <h3>How you got here...</h3>
+        <p>
+            The legends were old and the common folk didn't believe.
+            The great wizards, in their towers of learning, scoffed that such a thing could exist.  Yet...
+        </p>
+        <p>
+            In your family’s history, an ancient ancestor's journal speaks of the Cave of Gems.  Magical gems.
+            The possessor of such would have the power of a high-level mage at their fingertips!
+            Alas, your ancestor did not survive the trip, though his remains, and journal were found
+            floating in the river that passes through your family's lands.  But that was hundreds of years ago..
+        </p>
+        <p>
+            It is desperate times for your family.  The king's taxes are driving your family bankrupt
+            while the mages extort a heavy price to NOT curse your lands.  You decided to venture forth and find the cave.
+            Then you can get the gems, defy the mages and bless your lands so you can pay the king.
+        </p>
+        <p>
+            Everything was going well.  You followed the river, figuring you could find the cave at it's source.  But the
+            river disappeared into the side of a cliff.  You climbed the cliff, and after searching the plain above,
+            found a small stream that seemed to dive into the ground.  As you approached, the ground gave way beneath you,
+            plunging you into darkness.....
+        </p>
+
+        <div>
+            <button id="Adventure">Start Your Adventure!</button>
+        </div>
+        <br />
+        <br />
+
+    </section>  <!-- end intro screen section -->
 
 
-    <div id="stage">
-        <!-- Top piece goes all across top -->
-        <div id="topBanner">
-            <div id="headerText"><strong>The Cave</strong></div>
+    <!-- Game Screen section-->
+    <section id="gameScreen">
+
+        <div id="stage">
+            <!-- Top piece goes all across top -->
+            <div id="topBanner">
+                <div id="headerText"><strong>The Cave</strong></div>
+            </div>
+
+            <div id="screenImage">
+
+            </div>
+
+
+        </div>  <!-- End stage div -->
+
+
+        <p id="output"></p>
+        <p id="output2"></p>
+        <br />
+        <input id="input" type="text" placeholder="Enter your action here..." />
+        <button id="playGame"> Enter </button>
+        <button id="helpMe"> Help </button>
+        <button id="saveGame"> Save </button>
+        <button id="loadGame"> Load </button>
+        <button id="newGame"> New Game </button>
+
+        <!-- spacers at the bottom  -->
+        <br />
+        <br />
+
+    </section>   <!--  end game screen section   -->
+
+
+    <!--  HELP SCREEN section -->
+    <section id="helpScreen">
+        <div id="introTitle">HELP!</div>
+
+
+        <p>
+            Enter your command in the input text box.
+            Press the "Enter" button to finalize the command and have it take effect.
+            The area below the location image will display information about the area.
+            Items in the area are also shown as are the current contents of your pack.
+            Anything you are using (or wearing), will also show up in your pack as you have it "with you".
+            Some items can be used up.  When they are, they will disapear from your pack.
+        </p>
+
+
+        <h3>Commands Accepted:</h3>
+        <p>
+            Directional Commands:  "north", "south", "east", "west".
+        </p>
+
+        <p>
+            Action Commands:  "take", "use", "drop" followed by the item to take, use or drop.
+        </p>
+
+        <div><h3>Common Sense Items:</h3></div>
+        <ul>
+            <li> Don't wander around in the dark.</li>
+            <li> Don't play in dark, unknown waters.</li>
+            <li> Don't fight monsters with your bare hands.</li>
+            <li> Glowing things could be magical, very bad or both!</li>
+        </ul>
+
+        <br />
+        <br />
+        <div>
+            <button id="resumeGame">Resume Adventure!</button>
         </div>
 
-        <div id="screenImage">
+    </section>   <!--  end helpScreen screen section   -->
 
-        </div>
-
-
-    </div>
-
-
-    <p id="output"></p>
-    <p id="output2"></p>
-    <br />
-    <input id="input" type="text" placeholder="Enter your action here..." />
-    <button id="playGame"> Enter </button>
-    <button id="saveGame"> Save </button>
-    <button id="loadGame"> Load </button>
-    <button id="newGame"> New Game </button>
-
-    <!-- spacers at the bottom  -->
-    <br />
-    <br />
 
     <!-- link in the js script  -->
     <script src="js/TheCave.js"></script>
