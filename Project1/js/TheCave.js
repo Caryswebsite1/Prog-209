@@ -25,7 +25,7 @@
 // done my standard "G_" for their name prefix.
 
 // create map
-var map = [];
+const map = [];
 
 map[0] = "A glowing gateway blocks the path to the north.";
 map[1] = "An Ice Cave.  The icicles glitter like diamonds in the lantern light.  Rainbows rays of colors shine all around you.";
@@ -68,7 +68,7 @@ const Skull = "url(images/Skull.jpg)";
 // set boundary - blocked ways messages
 // multi dim array for different error messages from a location depending on direction attempted. 
 // first index is map location, second is attempted direction:  0 = N, 1 = east, 2 = south, 3 = west
-var blockedPathMessages = [[], [], [], [], [], [], [], [], []]; //  9 multi dim array for different error messages from a location depending on direction attempted. 
+const blockedPathMessages = [[], [], [], [], [], [], [], [], []]; //  9 multi dim array for different error messages from a location depending on direction attempted. 
 
 
 blockedPathMessages[0][0] = "The glowing gate seems locked. It won't open.";  // Gate north
@@ -111,8 +111,8 @@ var actionsIKnow = ["north", "east", "south", "west", "up", "down", "search", "t
 var action = "";
 
 // another item array to hold all the items the game understands
-// initially this is the same as the itemsInWorld.
-var itemsIKnow = ["salt", "rope", "grappling hook", "plate armor", "sword", "lantern", "pick axe", "glowing gem", "item8", "item9"];
+// this is Not the same as the itemsInWorld because the glowing gem is not available until it is mined.
+const itemsIKnow = ["salt", "rope", "grappling hook", "plate armor", "sword", "lantern", "pick axe", "glowing gem", "item8", "item9"];
 var currentItem = "";  // the current item being actioned
 
 
@@ -120,7 +120,8 @@ var MonsterInTheDark = {// must kill to get pick axe.
     hitpoints: 50,
     location: 1,
     bAlive: true
-}
+};
+
 // FLAGS for items and monsters
 var bLanternInUse = false;  // lamp must be on to be able to see anything...
 var bJellyMonsterAlive = true;  // must kill to get grappling hook
@@ -373,16 +374,15 @@ function playGame() {
                     case 5: // might be swimming the lake...
                         if (previousMapLocation != 2) {  // you are NOT just returning from whence you came...
                             // you are attempting to swim lake....
+                            // if dont make it accross lake then do nothing. 
+                            // swimLake function already set up messages.
 
-                            if (!swimLake()) {
-                                // if dont make it accross lake then do nothing. 
-                                // function already set up messages.
-                            }// end just swim it
-                            else {
+                            if (swimLake()) {
                                 // made it!
                                 previousMapLocation = mapLocation;
                                 mapLocation -= 3;
-                            }
+                            } // end if swimLake
+
                         }// end if you are not returning from where you came from.
                         else {
                             // you are returning from whence you came.
@@ -402,7 +402,7 @@ function playGame() {
                 if (mapLocation === 0) {
                     // Exit Gate
                     if (bGateOpen) {
-                        endGameReason ="Reached Exit";
+                        endGameReason = "Reached Exit";
                     }
                     else {
                         gameMessage = blockedPathMessages[mapLocation][0];
@@ -473,16 +473,15 @@ function playGame() {
                     case 5: // might be swimming the lake...
                         if (previousMapLocation != 8) {  // you are NOT just returning from whence you came...
                             // you are attempting to swim lake....
+                            // if dont make it accross lake then do nothing. 
+                            // function already set up messages.
 
-                            if (!swimLake()) {
-                                // if dont make it accross lake then do nothing. 
-                                // function already set up messages.
-                            }// end just swim it
-                            else {
+                            if (swimLake()) {
                                 // made it!
                                 previousMapLocation = mapLocation;
                                 mapLocation += 3;
-                            }
+                            } // end if swimLake
+
                         }// end if you are not returning from where you came from.
                         else {
                             // you are returning from whence you came.
@@ -519,16 +518,15 @@ function playGame() {
                     case 5: // might be swimming the lake...
                         if (previousMapLocation != 4) {  // you are NOT just returning from whence you came...
                             // you are attempting to swim lake....
+                            // if dont make it accross lake then do nothing. 
+                            // function already set up messages.
 
-                            if (!swimLake()) {
-                                // if dont make it accross lake then do nothing. 
-                                // function already set up messages.
-                            }// end just swim it
-                            else {
+                            if (swimLake()) {
                                 // made it!
                                 previousMapLocation = mapLocation;
                                 mapLocation -= 1;
-                            }
+                            }// end if swimLake
+
                         }// end if you are not returning from where you came from.
                         else {
                             // you are returning from whence you came.
@@ -546,7 +544,7 @@ function playGame() {
                         else {
                             previousMapLocation = mapLocation;
                             mapLocation -= 1;
-                            gameMessage = "You use the rope and grappling hook to climb the cliff."
+                            gameMessage = "You use the rope and grappling hook to climb the cliff.";
                         }
                         break;
 
@@ -615,15 +613,17 @@ function playGame() {
                     break;
         */
 
-        // added other cases in action array here to fall through to default untill I figure out if I want them or not:
+        // Other action cases I might use later:
+        /*
         case "search":
         case "open":
         case "close":
         case "up":
         case "down":
+        */
         default:
             gameMessage = "Sorry, I don't understand that.";
-            break;
+
 
     } // end big switch
 
@@ -833,10 +833,10 @@ function useItem() {
                             // no armor.. won't die but won't feel good.
                             gameMessage = "You attack the Monster lurking in the dark.  It's a tough fight and the Monster wounds you gravely.  The Monster is still alive!";
                         }
-                       
+
                     }// end where the Monster is.
                     else {
-                        gameMessage = "You swing the sword in great arcs.  You think you could do some damage with this."; 
+                        gameMessage = "You swing the sword in great arcs.  You think you could do some damage with this.";
                     }
                     break; // end sword switch
 
@@ -968,8 +968,6 @@ function renderGame() {
             default: // should not get here ever but...
                 output.innerHTML = "You stumbled and skewered yourself on a stalagmite!  Sadly you are dead!  <br>   GAME OVER";
                 screenImage.style.backgroundImage = Skull;
-                break;
-
 
         }// end switch endgame
 
@@ -1052,18 +1050,18 @@ function saveGame() {
     // create an object to put into JSON.stringify(obj);
     // temp gameStateObject
     var gameStateObject = {
-        mapLocation: mapLocation,    // location
-        previousMapLocation: previousMapLocation,  // previous location
-        itemsInWorld: itemsInWorld,   // items in the world
-        itemLocations: itemLocations,  // location of the items in the world
-        backpack: backpack,  // whats in the backpack 
-        bLanternInUse: bLanternInUse,  // lamp must be on to be able to see anything...
-        bJellyMonsterAlive: bJellyMonsterAlive,  // must kill to get grappling hook
-        MonsterInTheDark: MonsterInTheDark, // must kill to get pick axe.
-        endGameReason: endGameReason,  // game not ended
-        bGateOpen: bGateOpen,   // is the exit gate open?
-        bArmorOn: bArmorOn   // does the player have the armor on?
-    } // end temp game state obj creation.
+        saveMapLocation: mapLocation,    // location
+        savePreviousMapLocation: previousMapLocation,  // previous location
+        saveItemsInWorld: itemsInWorld,   // items in the world
+        saveItemLocations: itemLocations,  // location of the items in the world
+        saveBackpack: backpack,  // whats in the backpack 
+        savebLanternInUse: bLanternInUse,  // lamp must be on to be able to see anything...
+        savebJellyMonsterAlive: bJellyMonsterAlive,  // must kill to get grappling hook
+        saveMonsterInTheDark: MonsterInTheDark, // must kill to get pick axe.
+        saveEndGameReason: endGameReason,  // game not ended
+        savebGateOpen: bGateOpen,   // is the exit gate open?
+        savebArmorOn: bArmorOn   // does the player have the armor on?
+    }; // end temp game state obj creation.
 
     // stringify it all then save in local storage
     var dataString = JSON.stringify(gameStateObject);
@@ -1097,41 +1095,41 @@ function loadGame() {
     console.log("Gamestate Object after parse: " + gameStateObject);
 
     // now get data from state object
-    mapLocation = gameStateObject.mapLocation;
-    console.log("mapLocation: " + gameStateObject.mapLocation);
+    mapLocation = gameStateObject.saveMapLocation;
+    console.log("mapLocation: " + gameStateObject.saveMapLocation);
 
     // previous location
-    previousMapLocation = gameStateObject.previousMapLocation;
-    console.log("previousMapLocation: " + gameStateObject.previousMapLocation);
+    previousMapLocation = gameStateObject.savePreviousMapLocation;
+    console.log("previousMapLocation: " + gameStateObject.savePreviousMapLocation);
 
-    itemsInWorld = gameStateObject.itemsInWorld;
-    console.log("itemsInWorld: " + gameStateObject.itemsInWorld);
+    itemsInWorld = gameStateObject.saveItemsInWorld;
+    console.log("itemsInWorld: " + gameStateObject.saveItemsInWorld);
 
-    itemLocations = gameStateObject.itemLocations;
-    console.log("itemLocations: " + gameStateObject.itemLocations);
+    itemLocations = gameStateObject.saveItemLocations;
+    console.log("itemLocations: " + gameStateObject.saveItemLocations);
 
-    backpack = gameStateObject.backpack;
-    console.log("backpack: " + gameStateObject.backpack);
+    backpack = gameStateObject.saveBackpack;
+    console.log("backpack: " + gameStateObject.saveBackpack);
 
     // flags
-    bLanternInUse = gameStateObject.bLanternInUse;
-    console.log("bLanternInUse: " + gameStateObject.bLanternInUse);
+    bLanternInUse = gameStateObject.savebLanternInUse;
+    console.log("bLanternInUse: " + gameStateObject.savebLanternInUse);
 
-    bJellyMonsterAlive = gameStateObject.bJellyMonsterAlive;
-    console.log("bJellyMonsterAlive: " + gameStateObject.bJellyMonsterAlive);
+    bJellyMonsterAlive = gameStateObject.savebJellyMonsterAlive;
+    console.log("bJellyMonsterAlive: " + gameStateObject.savebJellyMonsterAlive);
 
-    MonsterInTheDark = gameStateObject.MonsterInTheDark;
-    console.log("MonsterInTheDark: " + gameStateObject.MonsterInTheDark);
+    MonsterInTheDark = gameStateObject.saveMonsterInTheDark;
+    console.log("MonsterInTheDark: " + gameStateObject.saveMonsterInTheDark);
 
-    endGameReason = gameStateObject.endGameReason;
-    console.log("endGameReason: " + gameStateObject.endGameReason);
+    endGameReason = gameStateObject.saveEndGameReason;
+    console.log("endGameReason: " + gameStateObject.saveEndGameReason);
 
-    bGateOpen = gameStateObject.bGateOpen;
-    console.log("bGateOpen: " + gameStateObject.bGateOpen);
+    bGateOpen = gameStateObject.savebGateOpen;
+    console.log("bGateOpen: " + gameStateObject.savebGateOpen);
 
-    bArmorOn = gameStateObject.bArmorOn;
-    console.log("bArmorOn: " + gameStateObject.bArmorOn);
-   
+    bArmorOn = gameStateObject.savebArmorOn;
+    console.log("bArmorOn: " + gameStateObject.savebArmorOn);
+
 
     // make sure all buttons available if not end of game.
     if (endGameReason.length < 2) {
@@ -1165,7 +1163,7 @@ function newGame() {
 
     // Call init then reset to intro screen.
     init();
-    
+
     // Hide the intro screen, show the game screen
     introScreen.style.display = "block";
     gameScreen.style.display = "none";
@@ -1225,13 +1223,11 @@ function swimLake() {
 //       Called to get random number from 1 to number given
 //       returns the number.
 //      
-//
 //-----------------------------------------------------
 function myRandom(inNumber) {
 
-    let randNum = Math.floor(Math.random() * inNumber) + 1;
+    var randNum = Math.floor(Math.random() * inNumber) + 1;
 
     return randNum;
 
 }// end myRandom
-
