@@ -186,7 +186,7 @@ resumeButton.addEventListener("click", resumeGameHandler, false);
 // GLOBAL ACTIONS:
 //-----------------------------------------------------
 window.addEventListener("load", init);  // force call to init function on load of page
-
+window.addEventListener("keydown", keydownHandler, false);  // to listen for the return key
 
 
 
@@ -295,6 +295,23 @@ function resumeGameHandler() {
     gameScreen.style.display = "block";
     helpScreen.style.display = "none";
 }// end resumeGameHandler
+
+
+
+//----------------------------------------------------------------------------------------
+// keydownHandler:   Called by key press event
+//                  
+//  Checks for if the return key was hit. If so, it calls the play game (Enter) button handler
+//  because we are going to treat an enter key hit the same as the button hit.  
+//-----------------------------------------------------------------------------------------
+function keydownHandler(event) {
+    // looking for the enter key...
+   
+    if (event.keyCode === 13) {
+        playGame();
+    }
+
+}// end keydown handler
 
 
 
@@ -1144,6 +1161,9 @@ function loadGame() {
     // make sure input box is visable and operational
     input.hidden = false;
     input.disabled = false;
+
+    // reinit game message:
+    gameMessage = "";
 
     // now redisplay game
     renderGame();
