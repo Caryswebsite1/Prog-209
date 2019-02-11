@@ -51,7 +51,7 @@ locationImages[3] = "url(images/JellyMonsterCaveCropped.jpg)";
 locationImages[4] = "url(images/mazeCave.jpg)";
 locationImages[5] = "url(images/SkullWaterCaveMod.jpg)";
 locationImages[6] = "url(images/LavaCave.jpeg)";
-locationImages[7] = "url(images/WaterfallCaveCropped.jpg)";
+locationImages[7] = "url(images/WaterfallCaveCropped373H.jpg)";
 locationImages[8] = "url(images/caveRiver.jpg)";
 
 
@@ -146,6 +146,11 @@ var playButton = document.getElementById("playGame");
 playButton.style.cursor = "pointer";
 playButton.addEventListener("click", playGame, false);
 
+// HelpMe  button:
+var helpButton = document.getElementById("helpMe");
+helpButton.style.cursor = "pointer";
+helpButton.addEventListener("click", helpMeHandler, false);
+
 var saveButton = document.getElementById("saveGame");
 saveButton.style.cursor = "pointer";
 saveButton.addEventListener("click", saveGame, false);
@@ -158,14 +163,29 @@ var newGameButton = document.getElementById("newGame");
 newGameButton.style.cursor = "pointer";
 newGameButton.addEventListener("click", newGame, false);
 
+
+
+// intro screen Adventure button:
+var AdventureButton = document.getElementById("Adventure");
+AdventureButton.style.cursor = "pointer";
+AdventureButton.addEventListener("click", startAdventureHandler, false);
+
+// resume Game  button:  // on help screen
+var resumeButton = document.getElementById("resumeGame");
+resumeButton.style.cursor = "pointer";
+resumeButton.addEventListener("click", resumeGameHandler, false);
+
 /* ****************************************************************************************
  * *************************  Functions Section *******************************************
  * **************************************************************************************** */
 
+// NOTES:  on load, only the intro screen will be visible. When user hits the startAdventure button,
+// then the main game screen will be shown and active.
 
 // GLOBAL ACTIONS:
 //-----------------------------------------------------
 window.addEventListener("load", init);  // force call to init function on load of page
+
 
 
 
@@ -207,10 +227,10 @@ function init() {
 
     // create an array for the items that are in the world at the start and set their locations
     // note: this itemsInWorld array will shrink as the player takes the items or grow as they drop the items.
-    itemsInWorld = ["salt", "rope", "grappling hook", "plate armor", "sword", "pick axe", "glowing gem"];
+    itemsInWorld = ["salt", "rope", "grappling hook", "plate armor", "sword", "pick axe"];
 
     // note: location index == item index.  value == map index
-    itemLocations = [6, 0, 3, 8, 4, 1, 2];
+    itemLocations = [6, 0, 3, 8, 4, 1];
 
     // backpack!
     backpack = ["lantern"];
@@ -229,6 +249,52 @@ function init() {
     renderGame();
 
 } // end function init
+
+
+
+//----------------------------------------------------------------------------------------
+// startAdventureHandler:   Called by start Adventure button handler
+//                  
+//  Hides the intro screen, shows the game screen.  
+//-----------------------------------------------------------------------------------------
+function startAdventureHandler() {
+    "use strict";
+    // Hide the intro screen, show the game screen
+    introScreen.style.display = "none";
+    gameScreen.style.display = "block";
+    helpScreen.style.display = "none";
+}// end start Game Handler.
+
+
+
+//----------------------------------------------------------------------------------------
+// helpMeHandler:   Called by help button handler
+//                  
+//  Hides the intro  and game screens, shows the help screen.  
+//-----------------------------------------------------------------------------------------
+function helpMeHandler() {
+    "use strict";
+    // Hide the intro screen, game screen, show the help screen
+    introScreen.style.display = "none";
+    gameScreen.style.display = "none";
+    helpScreen.style.display = "block";
+}// end helpMeHandler
+
+
+//----------------------------------------------------------------------------------------
+// resumeGameHandler:   Called by Resume Game button handler
+//                  
+//  Hides the intro and help screens, shows the game screen.  
+//-----------------------------------------------------------------------------------------
+function resumeGameHandler() {
+    "use strict";
+    // Hides the intro and help screens, shows the game screen. 
+
+    introScreen.style.display = "none";
+    gameScreen.style.display = "block";
+    helpScreen.style.display = "none";
+}// end resumeGameHandler
+
 
 
 //-----------------------------------------------------
@@ -786,12 +852,12 @@ function useItem() {
                     if (mapLocation === 2) {
                         if (backpack.indexOf("glowing gem") === -1) {
                             // mine that glowing gem!
-                            gameMessage = "You mine the wall with your pick axe and dig out a Huge glowing gem!  It must be worth millions!";
+                            gameMessage = "You mine the wall with your pick axe and dig out a Huge glowing gem!  Magical Power flows through you as you hold it!";
                             backpack.push("glowing gem");
                         }// end if not in backpack
                         else {
                             //you already have one!
-                            gameMessage = "Wait, you already have a glowing gem.  There isn't room in your pack for another.";
+                            gameMessage = "Wait, you already have a Huge glowing gem.  There isn't room in your pack for another.";
                         }
                     }// end if map location
                     else {
@@ -805,11 +871,11 @@ function useItem() {
                     console.log("in case glowing gem.");
                     if (mapLocation === 0) {
                         // at the gate!
-                        gameMessage = "The gem glows brighter and brighter as you bring it close to the gate.  Suddenly the gate flashes a bright purple and goes dim.";
+                        gameMessage = "With the gem back in your hands, you feel the vast magic power flowing through you.  As you approach the gate, the gem glows brighter and brighter.  Suddenly the gate flashes a bright purple and goes dim.";
                         bGateOpen = true;
                     }
                     else {
-                        gameMessage = "The gem makes a rather large nightlight...";
+                        gameMessage = "You can feel the magic power flowing through you.  You hold the gem high in both hands and in your mind you command: 'Let there be Light!'  The gem glows brightly.  It makes a rather large and, um, lets be honest, HEAVY,  nightlight...";
                     }
                     break;
 
@@ -961,7 +1027,7 @@ function renderGame() {
 
         // finally show players backpack contents:
         if (backpack.length != 0) {
-            output.innerHTML += "<br> You are carrying: " + backpack.join(",");
+            output.innerHTML += "<br> You are carrying: <strong>" + backpack.join(", ") + "</strong>";
         }
 
 
@@ -1097,8 +1163,12 @@ function loadGame() {
 //-----------------------------------------------------
 function newGame() {
 
-    // just call init
+    // Call init then reset to intro screen.
     init();
+    
+    // Hide the intro screen, show the game screen
+    introScreen.style.display = "block";
+    gameScreen.style.display = "none";
 
 }// end loadGame
 
