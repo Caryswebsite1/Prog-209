@@ -31,8 +31,8 @@ map[0][0] = "A glowing gateway blocks the path to the north.";
 map[0][1] = "A glowing gateway blocks the path to the north.";
 map[1][0] = "An Ice Cave.  The icicles glitter like diamonds in the lantern light.  Rainbows rays of colors shine all around you.";
 map[1][1] = "It's Very Cold.  And you hear something moving...";
-map[2][0] = "The Cave of Gems!  You found it!  Large glowing gems stud the walls and cieling, iluminating the area in a mystical light.";
-map[2][1] = "The Cave of Gems!  You found it!  Large glowing gems stud the walls and cieling, iluminating the area in a mystical light.";
+map[2][0] = "The Cave of Gems!  You found it!  Large glowing gems stud the walls and ceiling, iluminating the area in a mystical light.";
+map[2][1] = "The Cave of Gems!  You found it!  Large glowing gems stud the walls and ceiling, iluminating the area in a mystical light.";
 map[3][0] = "The walls and ceiling are covered in a strange jelly like substance.";
 map[3][1] = "Something squishes under your feet in the dark.";
 map[4][0] = "Your stomach does flip flops. You feel dizzy. There is a faint blueish haze all around. There are tunnels in each direction";
@@ -350,6 +350,9 @@ function playGame() {
     // that's how we have everything in our arrays
     playersInput = input.value;
     playersInput = playersInput.toLowerCase();
+
+    // clear the input text area. Nicer for the player.
+    input.value = "";
 
     // put out log of what we think player typed.
     console.log("players input is: " + playersInput + ".");
