@@ -25,17 +25,26 @@
 // done my standard "G_" for their name prefix.
 
 // create map
-const map = [];
+const map = [[], [], [], [], [], [], [], [], []];  // 9 dimentional array so we can have a lighted and unlighted map area discription.
 
-map[0] = "A glowing gateway blocks the path to the north.";
-map[1] = "An Ice Cave.  The icicles glitter like diamonds in the lantern light.  Rainbows rays of colors shine all around you.";
-map[2] = "Large glowing gems stud the walls and cieling, iluminating the area in a mystical light.";
-map[3] = "The walls and ceiling are covered in a strange jelly like substance.";
-map[4] = "Your stomach does flip flops. You feel dizzy. There is a faint blueish haze all around. There are tunnels in each direction";
-map[5] = "A large body of water stretches away from you.  ";
-map[6] = "The glow from the hot lava illuminates the area.  Through the sweat dripping in your eyes you see what appears to be salt deposits scattered around.";
-map[7] = "The roar of water fills your ears.  Spray fills the air.";
-map[8] = "The shallow river flows north.";
+map[0][0] = "A glowing gateway blocks the path to the north.";
+map[0][1] = "A glowing gateway blocks the path to the north.";
+map[1][0] = "An Ice Cave.  The icicles glitter like diamonds in the lantern light.  Rainbows rays of colors shine all around you.";
+map[1][1] = "It's Very Cold.  And you hear something moving...";
+map[2][0] = "The Cave of Gems!  You found it!  Large glowing gems stud the walls and cieling, iluminating the area in a mystical light.";
+map[2][1] = "The Cave of Gems!  You found it!  Large glowing gems stud the walls and cieling, iluminating the area in a mystical light.";
+map[3][0] = "The walls and ceiling are covered in a strange jelly like substance.";
+map[3][1] = "Something squishes under your feet in the dark.";
+map[4][0] = "Your stomach does flip flops. You feel dizzy. There is a faint blueish haze all around. There are tunnels in each direction";
+map[4][1] = "Your stomach does flip flops. You feel dizzy. There is a faint blueish haze all around. There are tunnels in each direction";
+map[5][0] = "A large body of water stretches away from you, the waves lapping against the shore.";
+map[5][1] = "You think you hear the lapping of waves?  How can that be?";
+map[6][0] = "The glow from the hot lava illuminates the area.  Through the sweat dripping in your eyes you see what appears to be salt deposits scattered around.";
+map[6][1] = "The glow from the hot lava illuminates the area.  Through the sweat dripping in your eyes you see what appears to be salt deposits scattered around.";
+map[7][0] = "The roar of water fills your ears.  Spray fills the air.";
+map[7][1] = "A constant roar fills your ears.  Your face is getting wet from something.";
+map[8][0] = "The shallow river flows north.";
+map[8][1] = "You hear what you think is the sound of moving water.";
 
 // set start location and previous location:
 var mapLocation = 0;
@@ -962,7 +971,7 @@ function renderGame() {
                 screenImage.style.backgroundImage = SeaMonster;
                 break;
 
-            case "armor drowned": // armor too heavy and you drowned
+            case "armor drowning": // armor too heavy and you drowned
                 output.innerHTML = "You try to swim across to the other side.  ALAS! The armor you have drags you under and you drown! <br> GAME OVER";
                 screenImage.style.backgroundImage = Drowned;
                 break;
@@ -1007,16 +1016,17 @@ function renderGame() {
 
 
         // IF the lantern is not on,  and not in a location with a light source, then player only sees the black!
-        if (!bLanternInUse && mapLocation != 6 && mapLocation != 2 && mapLocation != 0) {
+        if (!bLanternInUse && mapLocation != 6 && mapLocation != 4 && mapLocation != 2 && mapLocation != 0) {
             screenImage.style.backgroundImage = TheDark;
             gameMessage = "It is pitch black.  You can't see anything.";
+            output.innerHTML = map[mapLocation][1];  // in the dark description
             console.log("in dark if.  screenImage is: " + screenImage.style.backgroundImage);
         }
         else // lantern is on
         {
             // You can see!  show image and discription
             screenImage.style.backgroundImage = locationImages[mapLocation];
-            output.innerHTML = map[mapLocation];
+            output.innerHTML = map[mapLocation][0];  // in the light description
 
 
             // monster check:
@@ -1208,15 +1218,24 @@ function swimLake() {
 
     if (swimRoll > monsterChance) { // sea Monster eats you!
         endGameReason = "SeaMonster";
+        bSuccess = false;
     }
     else {
         swimRoll = myRandom(100);  // roll again to see if you can swim it
 
-        if (backpack.indexOf("armor") != -1) { // ugg, you are weighed down with armor!
-            swimChance = 25;  // armor weighs you down
-            if ((swimRoll - 50) > swimChance) // you drown!
+        if (backpack.indexOf("plate armor") != -1) {
+            // ugg, you are weighed down with armor!
+            console.log("weighed down.. initial swim roll: " + swimRoll);
+            swimChance = 25;  // armor weighs you down!
+           
+            if (swimRoll > swimChance) // you drown!
             {
                 endGameReason = "armor drowning";
+                bSuccess = false;
+                console.log("armor drowning");
+            }
+            else {  // swam it!
+                bSuccess = true;
             }
         }// end if armor
         else {
@@ -1224,6 +1243,7 @@ function swimLake() {
             if (swimRoll > swimChance) {
                 // had to turn back.  
                 gameMessage = "The water was too much for you.  You had to turn back before you drowned!";
+                bSuccess = false;
             }
             else {
                 bSuccess = true; // player swam it!
