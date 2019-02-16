@@ -133,12 +133,18 @@ function fireTorpedoHandler() {
         torpedo.x = (rocket.x - 200);
         torpedo.img.style.left = (rocket.x - 200) + "px";
 
+        /* I can't get on the fly to have both mp3 and ogg .  So defaulting to audio tags on the html page version
         // set up audio
         let myAudio = document.createElement("audio");
         myAudio.src = photon;
+        */
+        let myAudio = document.querySelector("#TorpSound");
+        myAudio.currentTime = 0;   // sets it to start at beginning of sound track.
         console.log("src = " + myAudio.src);
         myAudio.volume = 0.5;
         myAudio.play();
+    
+
 
         // NOTE: setTimeout does NOT stop execution of lines after it.  Rather it delays the execution of the
         // function given to it.  So this Forces the call to checkhit to wait so that hopefully the torp will 
@@ -210,7 +216,7 @@ function checkExplode() {
 
         // now hide ufo since it's been blown up!
         ufo.img.style.visibility = "hidden";
-        console.log('in checkExplode.  past time delay now.');
+        console.log("in checkExplode.  past time delay now.");
         bGameEnded = true;
         render();
     }
@@ -311,9 +317,15 @@ function render() {
         if (!bExplosionAudio) {
             // if we have yet to sound the explosion, do so now.
 
+            /* Again.  defaulting to html audio on the page version since I can't get
+             * the on the fly version to play both .mp3 or .ogg as needed.
+             * 
             // set up audio
             let myAudio = document.createElement("audio");
             myAudio.src = EXPLODE;
+            */
+            let myAudio = document.querySelector("#ExplosionSound");
+            myAudio.currentTime = 0;   // sets it to start at beginning of sound track.
             console.log("src = " + myAudio.src);
             myAudio.volume = 0.5;
             myAudio.play();
