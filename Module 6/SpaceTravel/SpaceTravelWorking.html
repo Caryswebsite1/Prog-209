@@ -1,0 +1,259 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="Viewport" content="width=device-width">
+    <meta name="description" content="Space Travel Ad for Prog 209" />
+
+    <link rel="stylesheet" type="text/css" href="SpaceTravelStyleSheet.css">
+    <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/dancing" type="text/css" />
+    <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/abibas" type="text/css" />
+    <title>Galactic Cruises</title>
+
+</head>
+
+<body>
+
+    <!-- need a background space image I can play with.  want to be able to zoom it in or out-->
+    <!-- need a space ship, luz liner or some such -->
+    <!-- need a planet and moons to approach and leave. -->
+    <!-- need an alien landscape -->
+    <!-- the concept: "Space, The Final Frontier!   Now YOU can explore the heavens,
+        See the unbelieveable, Be awed by the splender of our Universe!
+        Our luxury Space Liners can get you there in confort and style. Tour the nebulas,
+        stop by to see strange and beautiful alien planets.
+        Want to get a closer, more personal look?  Take a walk on the outside!
+        Behold the wonders space has to offer!
+        You know you are tired of being a grounder.  Set your gaze to the Stars! Book YOUR trip Now!
+
+        lead with basic star field image, and the title.  Follow with zoom (warp) to nebulas.  Bring in Space liner then warp it
+        and show far planets and zoom to close planet. Then show space walk.  Go back to a nebula or space with ship
+        then back to a picture of dismal ground... finally back to space with liner and liner warps out.
+
+         Text needs to be always on top, scrolling by.  Perhaps to the side?  Everything needs to loop.-->
+
+
+    <a id="galacticCruisesLink" href="GalacticCruisesBookingSite.html">
+
+        <div id="cruiseAd">
+
+            <!-- NOTE:  to have the starfield appear to advance toward us, use a time elapse on increasing the background size of an image.
+            An example here for part of how to do it.  Here the result is a image area 300 by 300, the img is another and the cx and cy are
+                multiplication values, in effect, magnifying the image...
+             result.style.backgroundSize = (img.width * cx) + "px " + (img.height * cy) + "px";
+
+                for use we would have something like: currentMainImage.style.backgroundSize = currentWidth * 10 + px etc. etc.
+
+                AND we can do the same in reverse for the ship!!
+
+                further, for new space images, we can have them fade in as the old one fades out.
+                -->
+            <!-- the concept:  Galactic Cruiselines! "Space, The Final Frontier!   Now YOU can explore the heavens,-->
+            <!-- First test.  Adding space field-->
+            <div class="spaceFields" id="Space1"></div>
+            <div class="GalacticText" id="TitleText">Galactic Cruiselines</div>
+            <div class="GalacticText" id="Text1">In a Galaxy, Far Far Away...</div>
+            <div class="GalacticText" id="Text2">Explore the heavens</div>
+            <div class="GalacticText" id="Text3">See the unbelieveable</div>
+            <div class="GalacticText" id="Text4">Be awed by the Splender of the Universe!</div>
+            <div class="farPlanets" id="Wonder1"></div>
+            <div class="farPlanets" id="Wonder2"></div>
+            <div class="farPlanets" id="Wonder3"></div>
+            <div class="farPlanets" id="Wonder4"></div>
+            <div class="GalacticText" id="Text5">Our luxury Space Liners will get you there in confort and style.</div>
+            <div class="spaceFields" id="Space2"></div>
+            <div id="LuxLiner"></div>
+            <div class="GalacticText" id="Text6">Tour the most famous Nebulas</div>
+            <!--Tour the nebulas,-->
+            <div class="nebula" id="Nebula1"></div>
+            <div class="GalacticText" id="Text7">See it all through your own cabin viewport <strong>OR...</strong></div>
+            <!-- See it all through your own cabin's viewport OR...-->
+            <div class="AlienPlanet" id="Viewport"></div>
+            <div class="GalacticText" id="Text8">Get a closer look!  Take a walk on the OUTSIDE!</div>
+            <!--Get a closer, more personal look!  Take a walk on the outside!-->
+            <div id="SpaceWalker"></div>
+            <div class="GalacticText" id="Text9">Go on excursions to see strange and beautiful alien planets.</div>
+            <!-- Take an excursion to see strange and beautiful alien planets.-->
+            <div class="AlienPlanet" id="AlienPlanet1"></div>
+            <div class="AlienPlanet" id="AlienPlanet2"></div>
+            <div class="AlienPlanet" id="AlienPlanet3"></div>
+            <!--majestic views-->
+            <div class="GalacticText" id="Text10">Majestic views are all around</div>
+            <div class="nebula" id="Nebula2"></div>
+            <div class="GalacticText" id="Text11">You know it's time to...</div>
+            <div class="GalacticText" id="TextGrounder"><strong>STOP BEING A GROUNDER!</strong></div>
+            <!--You know you are tired of being a grounder.-->
+            <div class="AlienPlanet" id="Grounder"></div>
+            <div class="GalacticText" id="Text12">Set your gaze to the Stars! Book YOUR trip with Galactic Cruiselines Now!</div>
+            <!--Set your gaze to the Stars! Book YOUR trip with Galactic Cruiselines Now!-->
+            <div class="spaceFields" id="Space2"></div>
+            <div class="GalacticText" id="Text13">CLICK HERE TO START YOUR ADVENTURE!</div>
+        </div><!-- End cruiseAd div -->
+
+        <audio id="MainTheme">
+            <source src="StarWarsMainTheme.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+
+    </a>  <!-- End galactic cruises link-->
+    <!-- Link in the tween max stuff -->
+    <script type="text/javascript" src="TweenMax.min.js"></script>
+
+    <!-- now the main js stuff.. might put into a js file.. -->
+
+    <script type="text/javascript">
+
+        /* (function () { */
+
+        // set up audio first.
+
+        function AudioReset() {
+            console.log("in Audio Reset");
+            let myAudio = document.querySelector("#MainTheme");
+            console.log("have myAudio: " + myAudio);
+            myAudio.pause();
+            console.log("just paused");
+            myAudio.volume = 0.5;
+            console.log("just set volume");
+            myAudio.currentTime = 0;
+            console.log("just set time");
+            myAudio.play();
+            console.log("just called play");
+        } // end AudioReset
+
+
+        // Call Audio Reset just before we start.  Then our onRepeat will call it every loop.
+        AudioReset();
+
+        console.log("first call to Audio Reset done.");
+
+        var myTL1 = new TimelineMax({ onRepeat: AudioReset, repeat: -1 });
+
+
+        // first set up first space background
+        myTL1.to('#Space1', 2.0, { opacity: 1, backgroundSize: "920px 300px", backgroundPosition: 'center', ease: Power0.easeNone })  // bring up space1
+            // WARNING:  Shadow effects do not scale properly for text.  It ends up scaling the distance between shadow and text too.
+            .to('#TitleText', 0.1, { opacity: 0, scale: 0.0001, ease: Power0.easeNone }, '+=1.0')  // give the background time to display
+            .to('#TitleText', 0.1, { opacity: 1, ease: Power0.easeNone })  // scaling while hidden, make visable 
+            .to('#TitleText', 6.0, { scale: 1, ease: Power0.easeNone })  // scale up
+            .to('#TitleText', 3.0, { top: -100, ease: Power0.easeNone })
+
+            // scale down text 1 while hidden then bring up.
+            .to('#Text1', 0.1, { scale: 0.0001, ease: Power0.easeNone }, '-=2.5')
+            .to('#Text1', 0.1, { opacity: 1, ease: Power0.easeNone })  // make visable
+            .to('#Text1', 6.0, { opacity: 1, scale: 1, ease: Power0.easeNone }, '-=2.5') // scale up.
+            .to('#Text1', 3.0, { top: -100, ease: Power0.easeNone })  //scroll texts
+            .to('#Text2', 8.0, { top: -100, ease: Power0.easeNone }, '-=4.5')
+            .to('#Text3', 8.0, { top: -100, ease: Power0.easeNone }, '-=6.5')
+            .to('#Text4', 8.0, { top: -100, ease: Power0.easeNone }, '-=6.5')
+
+            // now that the text has run, move to the right and left while we bring up the nebulas.
+            // BEWARE: adding "backgroundPositionX automatically makes the image not center but tied to upper left.
+            // backgroundPosition doesn't seem to work as expected.  Also both make the next loop not work right. sigh.
+            .to('#Space1', 6.0, { backgroundSize: "5000px 2000px", ease: Power2.easeOut }, '-=2.5')
+            //.to('#Space1', 4.0, { backgroundPositionX: 100, ease: Power2.easeOut }, '-=6.0')
+            .to('#Wonder1', 3.0, { opacity: 1, backgroundSize: "920px 300px", top: 0, left: 0, ease: Power0.easeNone }, '-=4.0')
+            .to('#Wonder1', 2.0, { opacity: 0, backgroundSize: "50px 20px", top: 150, left: 1000, ease: Power0.easeNone }, '-=0.1')
+            //           .to('#Space1', 4.0, { backgroundSize: "920px 300px", ease: Power0.easeNone }, '-=1.5')
+            //           .to('#Space1', 4.0, { backgroundSize: "920px 300px", backgroundPosition: "center", ease: Power0.easeNone }, '-=2.0')
+            //           .to('#Space1', 6.0, { backgroundSize: "5000px 2000px", backgroundPositionX: -25, ease: Power2.easeOut }, '-=2.0' )
+            .to('#Wonder2', 3.0, { opacity: 1, backgroundSize: "920px 300px", top: 0, left: 0, ease: Power0.easeNone }, '-=2.5')
+            .to('#Wonder2', 2.0, { opacity: 0, backgroundSize: "50px 20px", top: 150, left: -500, ease: Power0.easeNone }, '+=1.0')
+
+            .to('#Wonder3', 3.0, { opacity: 1, backgroundSize: "920px 300px", top: 0, left: 0, ease: Power0.easeNone }, '-=2.5')
+            .to('#Wonder3', 2.0, { opacity: 0, backgroundSize: "50px 20px", top: -500, left: 1000, ease: Power0.easeNone }, '+=1.0')
+
+            .to('#Wonder4', 3.0, { opacity: 1, backgroundSize: "920px 300px", top: 0, left: 0, ease: Power0.easeNone }, '-=2.5')
+            .to('#Wonder4', 2.0, { opacity: 0, backgroundSize: "50px 20px", top: -500, left: -500, ease: Power0.easeNone }, '+=1.0')
+
+
+            .to('#Space1', 6.0, { backgroundSize: "920px 300px", ease: Power2.easeOut }, '-=2.0')
+
+            // space liner time..
+            .to('#Text5', 8.0, { top: -100, ease: Power0.easeNone }, '-=4.5')
+
+            .to('#LuxLiner', 0.1, { opacity: 0, scale: 0.001, ease: Power0.easeNone })
+            .to('#LuxLiner', 0.1, { opacity: 1, ease: Power0.easeNone })
+            .to('#LuxLiner', 3.0, { scale: 1, ease: Power0.easeNone })
+
+            .to('#Text6', 8.0, { top: -100, ease: Power0.easeNone }, '-=2.5') // see the nebulas
+            .to('#LuxLiner', 2.0, { scale: 0.05, left: 300, top: 100, ease: Power0.easeNone })
+            .to('#Space1', 6.0, { backgroundSize: "5000px 2000px", ease: Power0.easeNone }, '-=2.0')
+            .to('#Nebula1', 4.0, { opacity: 1, backgroundSize: "920px 300px", top: 0, left: 0, ease: Power0.easeNone }, '-=4.0')
+            .to('#Nebula1', 6.0, { opacity: 1, backgroundSize: "5000px 2000px", ease: Power0.easeNone }) // zoom in on nebula
+
+
+            .to('#LuxLiner', 3.0, { opacity: 1, left: 0, top: 0, ease: Power0.easeNone }, '-=5.0') // move ship to center of screen
+            .to('#LuxLiner', 4.0, { opacity: 0, scale: 10, left: 0, top: 160, ease: Power0.easeNone }, '+=1.0')   // then zoom in on ship
+            .to('#Viewport', 2.0, { opacity: 1, backgroundSize: "920px 300px", top: 0, left: 0, ease: Power0.easeNone }, '-=3.0')
+
+            .to('#Text7', 9.0, { top: -100, ease: Power0.easeNone }, '-=4.5') // view from your viewport
+            .to('#Text8', 8.0, { top: -100, ease: Power0.easeNone }, '-=2.5') // or get closer
+            .to('#Viewport', 2.0, { opacity: 0, backgroundSize: "5000px 2000px", top: 0, left: 0, ease: Power0.easeNone })
+            .to('#SpaceWalker', 4.0, { opacity: 1, backgroundSize: "920px 300px", top: 0, left: 0, ease: Power0.easeNone }, '-=2.0')
+
+            .to('#Text9', 8.0, { top: -100, ease: Power0.easeNone }, '-=2.5') // excursion to alien planets
+            .to('#SpaceWalker', 2.0, { opacity: 0, backgroundSize: "920px 300px", top: 0, left: 0, ease: Power0.easeNone })
+            .to('#AlienPlanet1', 3.0, { opacity: 1, backgroundSize: "920px 300px", rotation: 360, top: 0, left: 0, ease: Power0.easeNone })
+            .to('#AlienPlanet1', 2.0, { opacity: 0, backgroundSize: "50px 20px", rotation: 360, top: 0, left: 0, ease: Power0.easeNone }, '+=1.0')
+            .to('#AlienPlanet2', 3.0, { opacity: 1, backgroundSize: "920px 300px", rotation: 360, top: 0, left: 0, ease: Power0.easeNone })
+            .to('#AlienPlanet2', 2.0, { opacity: 0, backgroundSize: "50px 20px", rotation: 360, top: 0, left: 0, ease: Power0.easeNone }, '+=1.0')
+            .to('#AlienPlanet3', 3.0, { opacity: 1, backgroundSize: "920px 300px", rotation: 360, top: 0, left: 0, ease: Power0.easeNone })
+
+            // do some behind the scenes work while planet 3 is up.
+            //            .to('#Space1', 0.1, { opacity: 0, backgroundSize: "920px 300px", backgroundPositionX: 0, ease: Power0.easeOut }) // reset and hide original star scene.
+            .to('#Space2', 0.1, { opacity: 1, backgroundSize: "5000px 2000px" }) // add second star scene zoomed in, all hidden behind planet 3
+            .to('#Nebula1', 0.1, { opacity: 0, backgroundSize: "920px 300px", top: 0, left: 0, ease: Power0.easeNone }) // reset nebula 1 and hide.
+            .to('#Nebula2', 0.1, { opacity: 1, backgroundSize: "920px 300px", top: 0, left: 0 }) // prep background with nebula2.
+            .to('#AlienPlanet3', 2.0, { opacity: 0, backgroundSize: "50px 20px", rotation: 360, top: 0, left: 0, ease: Power0.easeNone }, '+=0.6')
+
+            // moving to wonders and grounder
+            .to('#Text10', 8.0, { top: -100, ease: Power0.easeNone }, '-=4.5') // Majestic views
+            .to('#Nebula2', 3.0, { opacity: 0, backgroundSize: "50px 20px", top: 0, left: 0 }, '+=1.0') // move away from nebula2 to show space2.
+            .to('#Grounder', 3.0, { opacity: 1, backgroundSize: "920px 300px", top: 0, left: 0 }, '-=2.0') // zoom in grounder..
+            .to('#Text11', 8.0, { top: -100, scale: 1.5, ease: Power0.easeNone }, '-=2.5') // tired of being a grounder...
+            .to('#TextGrounder', 0.1, { opacity: 1, scale: 0.001, ease: Power0.easeNone }, '-=1.5')
+            .to('#TextGrounder', 3.0, { scale: 1, ease: Power0.easeNone }) // tired of being a grounder...
+            .to('#TextGrounder', 2.0, { opacity: 0, scale: 10, ease: Power0.easeNone }, '+=3.0') // expand and hide text
+            .to('#LuxLiner', 0.1, { opacity: 0, scale: 0.05 }) // resize ship
+            .to('#Grounder', 3.0, { opacity: 0 }) // fade out from grounder.. expose space2
+
+            // after they ponder the ground a bit, bring back luxliner and space and restart audio if possible.
+            .call(AudioReset, [], this, '-=2.0')
+            .to('#Space2', 3.0, { opacity: 1, backgroundSize: "920px 300px", ease: Power2.easeOut }) // zoom away from grounder
+            .to('#LuxLiner', 0.1, { opacity: 1, scale: 0.001, left: 300, top: 100, ease: Power0.easeNone }, '-=1.0')
+            .to('#LuxLiner', 3.0, { scale: 0.5, left: 300, top: 100, ease: Power0.easeNone }, '-=1.0') // bring ship back as we zoom away from grounder
+
+            .to('#Text12', 8.0, { top: 10, ease: Power0.easeNone }, '-=2.5') // Book your trip today!
+            .to('#LuxLiner', 3.0, { opacity: 1, scale: 0.001, left: 0, top: 0, ease: Power0.easeNone }) // warp ship back out.
+            .to('#LuxLiner', 0.1, { opacity: 0, scale: 0.001, left: 0, top: 0, ease: Power0.easeNone }) // warp ship back out.
+            .to('#TitleText', 0.1, { opacity: 0, scale: 0.05, top: 150, ease: Power0.easeNone }, '-=2.5') // reset title text.
+            .to('#Text12', 2.0, { top: -100, ease: Power0.easeNone }) // move book text off the screen
+            .to('#TitleText', 4.0, { opacity: 1, scale: 8, ease: Power0.easeNone }) // Galactic Cruises.
+            .to('#TitleText', 2.0, { top: 50, ease: Power0.easeNone })
+            .to('#Text13', 4.0, { top: 200, ease: Power0.easeNone }, '-=2.5') // Click Here to Book your trip!
+            //at this point we have only space 2 showing and our text..
+
+            //may need to reset everything so we can loop...
+            // try to get the original starfield back... also gives time for user to click to booking..
+            .to('#Space1', 3.0, { opacity: 0, backgroundSize: "920px 300px", ease: Power0.easeOut }, '+=5.0')
+
+            ; // end timeline
+
+                // new timeline to scroll the starting space
+                // var myTL2 = new TimelineMax({ repeat: -1 });  // repeat at -1 means this timeline will loop continuously.
+                // myTL2.to('#startingSpace', 8.0, { backgroundPositionX: 959, ease: Power0.easeNone });
+
+
+
+           /* }()); */   /* end of main anonomous js function. */
+
+            // to use a custom hyperbola that speeds up you can use CustomEase, but it may not be free to get...
+           // ease: CustomEase.create("custom", "M0,0 C0,0 0.48,0.014 0.692,0.226 0.97,0.504 1,1 1,1"), y: -500
+
+
+    </script>
+
+</body>
+</html>

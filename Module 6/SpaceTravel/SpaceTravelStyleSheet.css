@@ -1,0 +1,301 @@
+﻿body {
+    background-color: darkblue;
+}
+
+#galacticCruisesLink {
+    display: block;
+    background-color: black;
+    width: 920px;
+}
+
+
+#BookingTitle {
+    font-family: 'AbibasMedium';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 28px;
+    color: #9900FF;
+    text-align: center;
+}
+
+
+#cruiseAd {
+    position: relative;
+    overflow: hidden;
+    width: 920px;
+    height: 300px;
+    text-align:center;
+
+}
+
+
+
+    #cruiseAd .GalacticText {
+        position: absolute;
+        text-align: center;
+        font-family: 'AbibasMedium';
+        font-weight: normal;
+        font-style: normal;
+        font-size: 32px;
+        color: #9900FF;
+        width: inherit;
+        top: 500px; /* most text will scroll from below */
+        left: 0;
+        text-shadow: 3px 2px 0px black; /* horizontal, virt, blur, color */
+        opacity: 1;
+        z-index: 10;
+    }
+
+    #cruiseAd #TitleText {
+        font-weight: 800;
+        font-size: 80px;
+        top: 120px; /* bring in from center */
+        opacity: 0;
+    }
+
+
+    #cruiseAd #Text1 {
+        font-weight: 800;
+        font-size: 50px;
+        top: 150px; /* bring in from center */
+        opacity: 0;
+    }
+
+
+    #cruiseAd #TextGrounder {
+        font-weight: 800;
+        font-size: 60px;
+        top: 150px; /* bring in from center */
+        opacity: 0;
+    }
+
+
+    /*
+    #cruiseAd .GrounderText {
+        position: absolute;
+        text-align: center;
+        font-family: 'AbibasMedium';
+        font-weight: normal;
+        font-style: normal;
+        font-size: 50px;
+        color: #9900FF;
+        width: inherit;
+        top: 150px; 
+        left: 0;
+        text-shadow: 3px 2px 0px black; 
+        opacity: 1;
+        z-index: 10;
+    }
+
+    #cruiseAd #G01 #G02 {
+        position: absolute;
+        text-align: center;
+        font-weight: 800;
+        font-size: 50px;
+        top: 150px; 
+        opacity: 1;
+        z-index: 10;
+    }
+*/
+
+
+
+#cruiseAd .spaceFields {
+    position: absolute;
+    background: no-repeat;
+    top: 0px;
+    left: 0px;
+    margin: 0px, auto;
+    z-index: 0;
+}
+
+    #cruiseAd .farPlanets {
+        position: absolute;
+        background: no-repeat;
+        top: 150px;
+        left: 1000px;
+        background-size: 50px 20px;
+        z-index: 5;
+    }
+
+
+    #cruiseAd .nebula {
+        position: absolute;
+        background: no-repeat;
+        top: 0px;
+        left: 0px;
+        background-size: 50px 20px;
+        background-position: center;
+        z-index: 5;
+    }
+
+    #cruiseAd .AlienPlanet {
+        position: absolute;
+        background: no-repeat;
+        top: 0px;
+        left: 0px;
+        background-size: 50px 20px;
+        background-position: center;
+        z-index: 7;
+    }
+
+    #cruiseAd #Space1 {
+        width: inherit;
+        height: inherit;
+        background-image: url("images/BigStarfield.jpeg");
+        background-size: 920px 300px;
+        background-position: center;
+        background-repeat: repeat-x; /* so it will beable to scroll horizontally and repeat itself.*/
+        opacity: 0;
+    }
+
+    #cruiseAd #Wonder1 {
+        width: inherit;
+        height: inherit;
+        background-image: url("images/Wonder1.jpg");
+        background-position: center;
+        opacity: 0;
+    }
+
+    #cruiseAd #Wonder2 {
+        width: inherit;
+        height: inherit;
+        left: -1000px;
+        background-image: url("images/Wonder2.jpg");
+        background-position: center;
+        opacity: 0;
+    }
+
+    #cruiseAd #Wonder3 {
+        width: inherit;
+        height: inherit;
+        top:-500px;
+        background-image: url("images/Wonder3.jpg");
+        background-position: center;
+        opacity: 0;
+    }
+
+
+    #cruiseAd #Wonder4 {
+        width: inherit;
+        height: inherit;
+        left: -1000px;
+        top: -500px;
+        background-image: url("images/Wonder4.jpg");
+        background-position: center;
+        opacity: 0;
+    }
+
+
+
+    #cruiseAd #LuxLiner {
+        position: absolute;
+        top: 150;
+        left: 450;
+        background: no-repeat;
+        width: inherit;
+        height: inherit;
+        background-image: url("images/LuxLinerTrans.png");
+        background-size: 920px 300px;
+        background-position: center;
+        opacity: 0;
+        z-index: 10;
+    }
+
+    #cruiseAd #Nebula1 {
+        width: inherit;
+        height: inherit;
+        top: 0px;
+        left: 0px;
+        background-image: url("images/Nebula1.jpg");
+        background-position: center;
+        opacity: 0;
+    }
+
+    #cruiseAd #Viewport {
+        background: no-repeat;
+        width: inherit;
+        height: inherit;
+        top: 0px;
+        left: 0px;
+        background-image: url("images/shipViewport.jpg");
+        background-position: center;
+        background-size: 920px 300px;
+        opacity: 0;
+        z-index: 8;
+    }
+
+
+
+#cruiseAd #SpaceWalker {
+    position: absolute;
+    background: no-repeat;
+    width: inherit;
+    height: inherit;
+    top: 0px;
+    left: 0px;
+    background-image: url("images/spaceWalk.jpg");
+    background-position: center;
+    background-size: 920px 300px;
+    opacity: 0;
+    z-index: 10;
+}
+
+
+    #cruiseAd #AlienPlanet1 {
+        width: inherit;
+        height: inherit;
+        background-image: url("images/AlienPlanet1.jpg");
+        background-size: 50px 20px;
+        background-position: center;
+        opacity: 0;
+    }
+
+    #cruiseAd #AlienPlanet2 {
+        width: inherit;
+        height: inherit;
+        background-image: url("images/AlienPlanet2.jpg");
+        background-size: 50px 20px;
+        background-position: center;
+        opacity: 0;
+    }
+
+    #cruiseAd #AlienPlanet3 {
+        width: inherit;
+        height: inherit;
+        background-image: url("images/AlienPlanet3.jpg");
+        background-size: 50px 20px;
+        background-position: center;
+        opacity: 0;
+    }
+
+    #cruiseAd #Space2 {
+        width: inherit;
+        height: inherit;
+        background-image: url("images/Starfield2.jpg");
+        background-size: 920px 300px;
+        background-position: center;
+        opacity: 0;
+    }
+
+
+    #cruiseAd #Nebula2 {
+        width: inherit;
+        height: inherit;
+        top: 0px;
+        left: 0px;
+        background-image: url("images/Nebula2.jpg");
+        background-position: center;
+        opacity: 0;
+    }
+
+
+
+#cruiseAd #Grounder {
+    width: inherit;
+    height: inherit;
+    background-image: url("images/Ground1.jpg");
+    background-position: center;
+    background-size: 50px 20px;
+    opacity: 0;
+}
