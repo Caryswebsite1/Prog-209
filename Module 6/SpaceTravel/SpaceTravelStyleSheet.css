@@ -142,7 +142,7 @@
     #cruiseAd #Space1 {
         width: inherit;
         height: inherit;
-        background-image: url("images/BigStarfield.jpeg");
+        background-image: url("images/LittleBigStarfield.jpeg");
         background-size: 920px 300px;
         background-position: center;
         background-repeat: repeat-x; /* so it will beable to scroll horizontally and repeat itself.*/
