@@ -1,11 +1,12 @@
 ﻿body {
-    background-color: darkblue;
+    background-color: black;
 }
 
 #galacticCruisesLink {
     display: block;
     background-color: black;
     width: 920px;
+    margin: 0px auto;
 }
 
 
