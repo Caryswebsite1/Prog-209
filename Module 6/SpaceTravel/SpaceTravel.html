@@ -125,6 +125,14 @@
 
         /* (function () { */
 
+        // because the main starfield is so big, force a preload of it and any other big images..
+        var myImage = new Image();
+        myImage.src = "images/BigStarfield.jpg";
+
+        // same for the audio.  We will never do anything with it.
+        var myPreloadAudio = document.querySelector("#MainTheme");
+        
+
         // set up audio first.
 
         function AudioReset() {
