@@ -25,6 +25,10 @@ body {
     text-align:center;
 }
 
+#introScreen ol {
+    text-align:left;
+}
+
 #gameScreen {
     display: none;
 }
@@ -46,6 +50,7 @@ body {
     text-align: center;
     background-color: black;
 }
+
 
 
 /* set up the main viewscreen image.*/
