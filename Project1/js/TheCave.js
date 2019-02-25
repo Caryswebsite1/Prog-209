@@ -47,8 +47,8 @@ map[8][0] = "The shallow river flows north.";
 map[8][1] = "You hear what you think is the sound of moving water.";
 
 // set start location and previous location:
-var mapLocation = 0;
-var previousMapLocation = 0;
+let mapLocation = 0;
+let previousMapLocation = 0;
 
 // setup the images array
 const locationImages = [];
@@ -101,42 +101,42 @@ blockedPathMessages[8][3] = "The cliff is too high.  You can't go that way. Too 
 
 // create an array for the items that are in the world at the start and set their locations
 // note: this itemsInWorld array will shrink as the player takes the items or grow as they drop the items.
-var itemsInWorld = [];
+let itemsInWorld = [];
 
 // note: location index == item index.  value == map index
-var itemLocations = [];
+let itemLocations = [];
 
 // backpack!
-var backpack = [];
+let backpack = [];
 
 // players input string
-var playersInput = "";
+let playersInput = "";
 
 // game message for what's going on
-var gameMessage = "";
+let gameMessage = "";
 
 // game action array and current action:
-var actionsIKnow = ["north", "east", "south", "west", "up", "down", "search", "take", "use", "drop", "open", "close"];
-var action = "";
+let actionsIKnow = ["north", "east", "south", "west", "up", "down", "search", "take", "use", "drop", "open", "close"];
+let action = "";
 
 // another item array to hold all the items the game understands
 // this is Not the same as the itemsInWorld because the glowing gem is not available until it is mined.
 const itemsIKnow = ["salt", "rope", "grappling hook", "plate armor", "sword", "lantern", "pick axe", "glowing gem", "item8", "item9"];
-var currentItem = "";  // the current item being actioned
+let currentItem = "";  // the current item being actioned
 
 
-var MonsterInTheDark = {// must kill to get pick axe.
+let MonsterInTheDark = {// must kill to get pick axe.
     hitpoints: 50,
     location: 1,
     bAlive: true
 };
 
 // FLAGS for items and monsters
-var bLanternInUse = false;  // lamp must be on to be able to see anything...
-var bJellyMonsterAlive = true;  // must kill to get grappling hook
-var endGameReason = "";  // loaded with reason for end game so correct messages can be shown.??
-var bGateOpen = false;  // is the exit gate open?
-var bArmorOn = false;   // does the player have the armor on?
+let bLanternInUse = false;  // lamp must be on to be able to see anything...
+let bJellyMonsterAlive = true;  // must kill to get grappling hook
+let endGameReason = "";  // loaded with reason for end game so correct messages can be shown.??
+let bGateOpen = false;  // is the exit gate open?
+let bArmorOn = false;   // does the player have the armor on?
 
 
 /* *********************************************************************
@@ -144,44 +144,44 @@ var bArmorOn = false;   // does the player have the armor on?
  *  ********************************************************************* */
 
 // the image element for the display of the image on the page:
-var screenImage = document.getElementById("screenImage");
+let screenImage = document.getElementById("screenImage");
 
 // the input and output fields too.
-var input = document.querySelector("#input");
-var output = document.querySelector("#output");  // used for main discriptions
-var output2 = document.querySelector("#output2");  // used for action results in a separate color..
+let input = document.querySelector("#input");
+let output = document.querySelector("#output");  // used for main discriptions
+let output2 = document.querySelector("#output2");  // used for action results in a separate color..
 
 // set up the play, save, load  and newGame buttons
-var playButton = document.getElementById("playGame");
+let playButton = document.getElementById("playGame");
 playButton.style.cursor = "pointer";
 playButton.addEventListener("click", playGame, false);
 
 // HelpMe  button:
-var helpButton = document.getElementById("helpMe");
+let helpButton = document.getElementById("helpMe");
 helpButton.style.cursor = "pointer";
 helpButton.addEventListener("click", helpMeHandler, false);
 
-var saveButton = document.getElementById("saveGame");
+let saveButton = document.getElementById("saveGame");
 saveButton.style.cursor = "pointer";
 saveButton.addEventListener("click", saveGame, false);
 
-var loadButton = document.getElementById("loadGame");
+let loadButton = document.getElementById("loadGame");
 loadButton.style.cursor = "pointer";
 loadButton.addEventListener("click", loadGame, false);
 
-var newGameButton = document.getElementById("newGame");
+let newGameButton = document.getElementById("newGame");
 newGameButton.style.cursor = "pointer";
 newGameButton.addEventListener("click", newGame, false);
 
 
 
 // intro screen Adventure button:
-var AdventureButton = document.getElementById("Adventure");
+let AdventureButton = document.getElementById("Adventure");
 AdventureButton.style.cursor = "pointer";
 AdventureButton.addEventListener("click", startAdventureHandler, false);
 
 // resume Game  button:  // on help screen
-var resumeButton = document.getElementById("resumeGame");
+let resumeButton = document.getElementById("resumeGame");
 resumeButton.style.cursor = "pointer";
 resumeButton.addEventListener("click", resumeGameHandler, false);
 
@@ -358,8 +358,8 @@ function playGame() {
     console.log("players input is: " + playersInput + ".");
 
     // figure out the players action selection
-    var i = 0;
-    var loopEnd = actionsIKnow.length;
+    let i = 0;
+    let loopEnd = actionsIKnow.length;
 
     for (i = 0; i < loopEnd; i++) {
         // if what the player put in is a valid game action then..
@@ -677,7 +677,7 @@ function takeItem() {
     // that the item actually exists at the players location.  If so, remove from world
     // and add to players backpack.
 
-    var itemIndex = itemsInWorld.indexOf(currentItem);
+    let itemIndex = itemsInWorld.indexOf(currentItem);
 
     // output item and itemindex we are working with for debug.
     console.log("currentItem: " + currentItem + " itemIndex: " + itemIndex);
@@ -755,7 +755,7 @@ function dropItem() {
 
     if (backpack.length != 0) {
 
-        var itemIndex = -1;  // init index
+        let itemIndex = -1;  // init index
         itemIndex = backpack.indexOf(currentItem);
 
         if (itemIndex != -1) {
@@ -815,12 +815,12 @@ function useItem() {
     console.log("in useItem.  Current Item is: " + currentItem);
     // currently known items: "Salt", "Rope", "Grappling Hook", "Plate Armor", "Sword", "Lantern", "Pick Axe", "Glowing Gem"
 
-    var bItemUsedUp = false;  // bool for if item is destroyed.
-    var bItemPlaced = false;  // bool for if item is placed in world by using.
+    let bItemUsedUp = false;  // bool for if item is destroyed.
+    let bItemPlaced = false;  // bool for if item is placed in world by using.
 
     if (backpack.length != 0) {
 
-        var itemIndex = -1;  // init index
+        let itemIndex = -1;  // init index
         itemIndex = backpack.indexOf(currentItem);
 
         if (itemIndex != -1) {
@@ -1065,7 +1065,7 @@ function renderGame() {
             }
 
 
-            var i = 0;
+            let i = 0;
             //show items if they are there at this location
             for (i = 0; i < itemsInWorld.length; i++) {
                 if (mapLocation === itemLocations[i]) {
@@ -1105,7 +1105,7 @@ function saveGame() {
 
     // create an object to put into JSON.stringify(obj);
     // temp gameStateObject
-    var gameStateObject = {
+    let gameStateObject = {
         saveMapLocation: mapLocation,    // location
         savePreviousMapLocation: previousMapLocation,  // previous location
         saveItemsInWorld: itemsInWorld,   // items in the world
@@ -1120,7 +1120,7 @@ function saveGame() {
     }; // end temp game state obj creation.
 
     // stringify it all then save in local storage
-    var dataString = JSON.stringify(gameStateObject);
+    let dataString = JSON.stringify(gameStateObject);
 
     // now save to local storage
     localStorage.setItem("TheCaveGameData", dataString);
@@ -1139,9 +1139,9 @@ function saveGame() {
 function loadGame() {
 
     // temp gameStateObject
-    var gameStateObject = null;
+    let gameStateObject = null;
 
-    var tempString = "";
+    let tempString = "";
     // get state object from local storage
     tempString = localStorage.getItem("TheCaveGameData");
 
@@ -1240,10 +1240,10 @@ function newGame() {
 //-----------------------------------------------------
 function swimLake() {
 
-    var monsterChance = 50; // chance for seamonster to eat you.
-    var swimChance = 75;   // chance for player to successfully swim it.
-    var swimRoll = myRandom(100);  // roll to see if monster eats you!
-    var bSuccess = false;
+    let monsterChance = 50; // chance for seamonster to eat you.
+    let swimChance = 75;   // chance for player to successfully swim it.
+    let swimRoll = myRandom(100);  // roll to see if monster eats you!
+    let bSuccess = false;
 
     if (swimRoll > monsterChance) { // sea Monster eats you!
         endGameReason = "SeaMonster";
@@ -1295,7 +1295,7 @@ function swimLake() {
 //-----------------------------------------------------
 function myRandom(inNumber) {
 
-    var randNum = Math.floor(Math.random() * inNumber) + 1;
+    let randNum = Math.floor(Math.random() * inNumber) + 1;
 
     return randNum;
 
