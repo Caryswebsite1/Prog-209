@@ -683,7 +683,7 @@ function takeItem() {
     console.log("currentItem: " + currentItem + " itemIndex: " + itemIndex);
 
     if (itemIndex != -1 &&
-        itemLocations[itemIndex] == mapLocation) {
+        itemLocations[itemIndex] === mapLocation) {
 
         // monster check
         if (mapLocation === 3 && bJellyMonsterAlive) { // jelly monster!
@@ -697,19 +697,34 @@ function takeItem() {
             // ok, remove from world if NOT salt:
             if (currentItem != "salt") {
                 // cant run out of salt
-                itemsInWorld.splice(itemIndex, 1);
-                itemLocations.splice(itemIndex, 1);
+
+                // if gem, only one allowed in pack
+                if (currentItem === "glowing gem" && (backpack.indexOf("glowing gem") !== -1) ) {
+                    gameMessage = "Wait, you already have a HUGE glowing gem.  You don't have room in your pack for another.";
+                }
+                else {
+                    itemsInWorld.splice(itemIndex, 1);
+                    itemLocations.splice(itemIndex, 1);
+                }// end if gem
+
             }// end if not salt
 
+           
             // put in pack and display message to player
-            backpack.push(currentItem);
-            gameMessage = "You take the " + currentItem + ".";
+            // if gem, only one allowed in pack
+            if (currentItem === "glowing gem" && (backpack.indexOf("glowing gem") !== -1) ){
+                gameMessage = "Wait, you already have a HUGE glowing gem.  You don't have room in your pack for another.";
+            }
+            else {
+                backpack.push(currentItem);
+                gameMessage = "You take the " + currentItem + ".";
 
-            // add notes to console.log for debug
-            console.log("Player took " + currentItem + " from " + mapLocation);
-            console.log("Player's backpack now holds: " + backpack);
-            console.log("Items in World are now: " + itemsInWorld);
-            console.log("Item locations in world are now: " + itemLocations);
+                // add notes to console.log for debug
+                console.log("Player took " + currentItem + " from " + mapLocation);
+                console.log("Player's backpack now holds: " + backpack);
+                console.log("Items in World are now: " + itemsInWorld);
+                console.log("Item locations in world are now: " + itemLocations);
+            }
         }// end else jelly monster not alive.
     }
     else {
@@ -747,12 +762,21 @@ function dropItem() {
 
             // ok it exists in backpack.  Remove from pack, add to world.
             backpack.splice(itemIndex, 1);
-            itemsInWorld.push(currentItem);
-            itemLocations.push(mapLocation);
+
+            //if it is salt, and location is 6 (lava / salt pit) then don't add to world.
+            if ( !(mapLocation === 6 && currentItem === "salt") ) {
+                itemsInWorld.push(currentItem);
+                itemLocations.push(mapLocation);
+            }
 
             // tell player they dropped it.
             gameMessage = "You dropped the " + currentItem + ".";
 
+            // if its the lantern, douse the light!
+            if (currentItem === "lantern") {
+                bLanternInUse = false;
+            }
+ 
         }
         else {
             // item not in back pack
@@ -882,11 +906,13 @@ function useItem() {
                         if (backpack.indexOf("glowing gem") === -1) {
                             // mine that glowing gem!
                             gameMessage = "You mine the wall with your pick axe and dig out a Huge glowing gem!  Magical Power flows through you as you hold it!";
-                            backpack.push("glowing gem");
+                            // add gem to world at this spot.
+                            itemsInWorld.push("glowing gem");
+                            itemLocations.push(mapLocation);
                         }// end if not in backpack
                         else {
                             //you already have one!
-                            gameMessage = "Wait, you already have a Huge glowing gem.  There isn't room in your pack for another.";
+                            gameMessage = "Wait, you already have a HUGE glowing gem.  You don't have room in your pack for another.";
                         }
                     }// end if map location
                     else {
