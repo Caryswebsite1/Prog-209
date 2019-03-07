@@ -1,0 +1,49 @@
+﻿body {
+    background-color: black;
+}
+
+
+#myHeader {
+    background-color: black;
+    color: gold;
+    font-size: 26px;
+    font-weight: 600;
+    text-align: center;
+}
+
+
+#mainContainer {
+    position:relative;
+    width: 700px;
+    height: 500px;
+    border: 5px groove gold;
+    margin: 10px auto;
+}
+
+
+
+.movingTree{
+    position:absolute;
+    display:block;
+    top: 200px;
+    left: 310px;
+    width:80px;
+    height: 80px;
+}
+
+#ButtonDiv{
+    text-align:center;
+}
+
+#Crazy {
+    background-color: red;
+    color: gold;
+}
+
+.crazyTree {
+    position: absolute;
+    display: block;
+    width: 8px;
+    height: 8px;
+}
+
