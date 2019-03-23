@@ -1,4 +1,4 @@
-"use strict";
+//"use strict";
 
 /* **********************************************************************************
  * ************ The Goblin King *****************************************************
@@ -24,27 +24,102 @@
 // Note: these are all global data variables and because there are so many, I have not
 // done my standard "G_" for their name prefix.
 
+// NOTE: for arrays.  [ [], [] ] is an array whose first index only goes to 1 (0, 1) and the second index 
+// can go as far as desired.  ie a 2 by infinite array.  a [[], [], []] creates a 3 by infinite and so on.
+// a [ [ [], [] ] ] creates a 1 by 2 by infinte...  similarly [ [ [], [] ], [ [], [] ] ] creates a 2 by 2 by infinte.
+
 // create map
-const map = [[], [], [], [], [], [], [], [], []];  // 9 dimentional array so we can have a lighted and unlighted map area discription.
+const map = [[], [], [], [], [], [], [], [], []];  // 9 by infinite array so we can have a lighted and unlighted map area discription and sound
 
 map[0][0] = "A glowing gateway blocks the path to the north.";
 map[0][1] = "A glowing gateway blocks the path to the north.";
+map[0][2] = "audio/Tibeton_Cymbol_for_gate.mp3";
+
 map[1][0] = "An Ice Cave.  The icicles glitter like diamonds in the lantern light.  Rainbows rays of colors shine all around you.";
 map[1][1] = "It's Very Cold.  And you hear something moving...";
+map[1][2] = "audio/wind01.mp3";
+
 map[2][0] = "The Cave of Gems!  You found it!  Large glowing gems stud the walls and ceiling, iluminating the area in a mystical light.";
 map[2][1] = "The Cave of Gems!  You found it!  Large glowing gems stud the walls and ceiling, iluminating the area in a mystical light.";
+map[2][2] = "audio/CrytalCaveMagic.mp3";
+
 map[3][0] = "The walls and ceiling are covered in a strange jelly like substance.";
 map[3][1] = "Something squishes under your feet in the dark.";
+map[3][2] = "audio/water-drops-daniel_simon.mp3";
+
 map[4][0] = "Your stomach does flip flops. You feel dizzy. There is a faint blueish haze all around. There are tunnels in each direction";
 map[4][1] = "Your stomach does flip flops. You feel dizzy. There is a faint blueish haze all around. There are tunnels in each direction";
+map[4][2] = "audio/Bats_in_Cave.mp3";
+
 map[5][0] = "A large body of water stretches away from you, the waves lapping against the shore.";
 map[5][1] = "You think you hear the lapping of waves?  How can that be?";
+map[5][2] = "audio/oceano2.mp3";
+
 map[6][0] = "The glow from the hot lava illuminates the area.  Through the sweat dripping in your eyes you see what appears to be salt deposits scattered around.";
 map[6][1] = "The glow from the hot lava illuminates the area.  Through the sweat dripping in your eyes you see what appears to be salt deposits scattered around.";
+map[6][2] = "audio/lava4.mp3";
+
 map[7][0] = "The roar of water fills your ears.  Spray fills the air.";
 map[7][1] = "A constant roar fills your ears.  Your face is getting wet from something.";
+map[7][2] = "audio/large_waterfall_1-daniel_simon.mp3";
+
 map[8][0] = "The shallow river flows north.";
 map[8][1] = "You hear what you think is the sound of moving water.";
+map[8][2] = "audio/Babbling_Brook.mp3";
+
+
+
+/* *********************************************************************
+ * ************************Audio Set up ********************************
+ * *********************************************************************
+ */
+
+// Set up audio via an array of sounds, 1 per map location.(see map[x][2])
+// access example: myAudio.setAttribute("src", MyPlayList[3]);
+
+// set up an array for additional overlay sounds as well.. 
+
+// additional sounds:
+let OtherSounds = [];
+OtherSounds[0] = "audio/Africa.mp3";  // main opening game song
+OtherSounds[1] = "audio/forest_fire.mp3"; // to overlay with lava in lava cave
+OtherSounds[2] = "audio/gravelwalk.mp3"; // main area transition sound
+OtherSounds[3] = "audio/FallingToDeath.mp3";  // you fall to your death
+OtherSounds[4] = "audio/Monster_Footsteps.mp3"; // for monster attack and or follow
+OtherSounds[5] = "audio/Blade_Combat.mp3";  // player attacks monster with sword
+OtherSounds[6] = "audio/MonsterFarAway.mp3";  // monster is far away
+OtherSounds[7] = "audio/MonsterInSameRoom.mp3";  // monster is in YOUR cave room!!
+OtherSounds[8] = "audio/Drowning.mp3";  // You Drown
+OtherSounds[9] = "audio/MonsterTearFlesh.mp3";  // monster is eatting you.
+OtherSounds[10] = "audio/EarthQuake.mp3";  // Earthquake!
+OtherSounds[11] = "audio/HotSizzling.mp3";  // Earthquake!
+
+
+// Our main audio object:
+let mainAudio = document.createElement("audio");
+mainAudio.setAttribute("type", "audio/mpeg");
+mainAudio.volume = 0.3;
+mainAudio.currentTime = 0;   // sets it to start at beginning of sound track.
+
+// overlay audio object:
+let overlayAudio = document.createElement("audio");
+overlayAudio.setAttribute("type", "audio/mpeg");
+overlayAudio.volume = 0.4; // a bit higher than background.
+overlayAudio.currentTime = 0;   // sets it to start at beginning of sound track.
+
+// create additional audio resource for fight.
+let fightAudio = document.createElement("audio");
+fightAudio.setAttribute("type", "audio/mpeg");
+fightAudio.volume = 0.4; // a bit higher than background.
+fightAudio.currentTime = 0;   // sets it to start at beginning of sound track.
+fightAudio.setAttribute("src", OtherSounds[5]); // only one sound this will usually use.
+
+// booleans to make sure we don't do wrong sounds on these screens.
+let bIntroScreen = true;
+let bHelpScreen = false;
+
+/* **************************** End Audio Setup **************************************************** */
+
 
 // set start location and previous location:
 let mapLocation = 0;
@@ -116,27 +191,39 @@ let playersInput = "";
 let gameMessage = "";
 
 // game action array and current action:
-let actionsIKnow = ["north", "east", "south", "west", "up", "down", "search", "take", "use", "drop", "open", "close"];
+let actionsIKnow = ["north", "east", "south", "west", "take", "use", "drop", "ronaustin"];
 let action = "";
 
 // another item array to hold all the items the game understands
 // this is Not the same as the itemsInWorld because the glowing gem is not available until it is mined.
-const itemsIKnow = ["salt", "rope", "grappling hook", "plate armor", "sword", "lantern", "pick axe", "glowing gem", "item8", "item9"];
+const itemsIKnow = ["salt", "rope", "grappling hook", "plate armor", "sword", "lantern", "pick axe", "glowing gem", "fish", "item9"];
 let currentItem = "";  // the current item being actioned
 
-
+/* ***********************************************************************
+ * *****************  Actual Moving Objects *************************************
+ * *********************************************************************** */
 let MonsterInTheDark = {// must kill to get pick axe.
     hitpoints: 50,
     location: 1,
     bAlive: true
 };
 
+let Player = {
+    hitpoints: 10,
+    location: 8,
+    bAlive: true,
+    deathReason: "",
+    armor: false,
+    swordSkill: 0
+};
+
+/* ***************** End Moving Objects ******************************************* */
+
 // FLAGS for items and monsters
 let bLanternInUse = false;  // lamp must be on to be able to see anything...
 let bJellyMonsterAlive = true;  // must kill to get grappling hook
 let endGameReason = "";  // loaded with reason for end game so correct messages can be shown.??
 let bGateOpen = false;  // is the exit gate open?
-let bArmorOn = false;   // does the player have the armor on?
 
 
 /* *********************************************************************
@@ -145,6 +232,9 @@ let bArmorOn = false;   // does the player have the armor on?
 
 // the image element for the display of the image on the page:
 let screenImage = document.getElementById("screenImage");
+
+// magic haze
+let magicHaze = document.getElementById("theMagicHaze");
 
 // the input and output fields too.
 let input = document.querySelector("#input");
@@ -174,6 +264,11 @@ newGameButton.style.cursor = "pointer";
 newGameButton.addEventListener("click", newGame, false);
 
 
+// intro screen Play Intro button:
+let PlayIntroButton = document.getElementById("PlayIntro");
+PlayIntroButton.style.cursor = "pointer";
+PlayIntroButton.addEventListener("click", runIntroduction, false);
+
 
 // intro screen Adventure button:
 let AdventureButton = document.getElementById("Adventure");
@@ -184,6 +279,9 @@ AdventureButton.addEventListener("click", startAdventureHandler, false);
 let resumeButton = document.getElementById("resumeGame");
 resumeButton.style.cursor = "pointer";
 resumeButton.addEventListener("click", resumeGameHandler, false);
+
+
+
 
 /* ****************************************************************************************
  * *************************  Functions Section *******************************************
@@ -204,7 +302,7 @@ window.addEventListener("keydown", keydownHandler, false);  // to listen for the
 //        button event handlers already set up in declarations.
 //-----------------------------------------------------
 function init() {
-
+    "use strict";
     // init main game state variables.  we can also call init from newGame button handler
     // and it will reset the world.
 
@@ -215,7 +313,9 @@ function init() {
     MonsterInTheDark.bAlive = true; // must kill to get pick axe. // must kill to get pick axe.
     endGameReason = "";  // game not ended
     bGateOpen = false;  // is the exit gate open?
-    bArmorOn = false;   // does the player have the armor on?
+    Player.armor = false;   // no armor yet.
+    Player.hitpoints = 10;  // no carryover from last game!
+    Player.swordSkill = 0;
 
     // make sure input box is visable and operational
     input.hidden = false;
@@ -231,16 +331,24 @@ function init() {
     newGameButton.disabled = false;
 
 
+    // make sure adventure button not arround until intro is done..
+    //AdventureButton.disabled = true;
+    //AdventureButton.hidden = true;
+
+    // make sure play intro button is visible.
+    PlayIntroButton.disabled = false;
+    PlayIntroButton.hidden = false;
+
     // set start location:
     mapLocation = 7;
     previousMapLocation = 7;
 
     // create an array for the items that are in the world at the start and set their locations
     // note: this itemsInWorld array will shrink as the player takes the items or grow as they drop the items.
-    itemsInWorld = ["salt", "rope", "grappling hook", "plate armor", "sword", "pick axe"];
+    itemsInWorld = ["salt", "rope", "grappling hook", "plate armor", "sword", "pick axe", "fish"];
 
     // note: location index == item index.  value == map index
-    itemLocations = [6, 0, 3, 8, 4, 1];
+    itemLocations = [6, 0, 3, 8, 4, 1, 5];
 
     // backpack!
     backpack = ["lantern"];
@@ -255,10 +363,242 @@ function init() {
     output2.innerHTML = "";
     output2.value = "";
 
+
+    bIntroScreen = true;
+    bHelpScreen = false;
+
     // now that everything is set, display everything.
     renderGame();
 
 } // end function init
+
+
+//----------------------------------------------------------------------------------------
+// runIntroduction:   Called by init
+//                  
+//  runs the animated story for the introduction.
+//-----------------------------------------------------------------------------------------
+function runIntroduction() {
+    "use strict";
+    // NOTE: you can't count on anything being set correctly before this runs even with a reset call.... not sure why but it seems a 1 run show this way.
+    //resetIntro();
+
+    bIntroScreen = true;
+
+    // hide intro button now.
+    PlayIntroButton.disabled = true;
+    PlayIntroButton.hidden = true;
+
+    // hide start adventure button too:  This because I have not found a way to stop an animation in progress.. sigh.
+    AdventureButton.disabled = true;
+    AdventureButton.hidden = true;
+
+    // set intro sound.
+    overlayAudio.setAttribute("src", OtherSounds[0]);
+    overlayAudio.play();
+
+    let myTL2 = new TimelineMax();
+    // run timeline
+    myTL2.delay(10.0)
+        .to("#IntroStartPicture", 0.1, { display: "none", ease: Power0.easeNone })  // remove starting picture
+        .to("#IntroPicture1", 0.1, { display: "initial", scale: 0.0001, ease: Power0.easeNone })
+        .to("#IntroPicture1", 2.0, { opacity: 1, scale: 1, ease: Power0.easeNone })  // bring up crystal picture to start
+
+        .to("#LegendText1", 8.0, { top: -250, ease: Power0.easeNone }) // scroll text
+        .to("#LegendText2", 8.0, { top: -250, ease: Power0.easeNone }, "-= 3.0") // scroll text
+
+        .to("#IntroPicture2", 0.1, { display: "initial", scale: 0.0001, ease: Power0.easeNone }) // set up initial river picture
+        .to("#IntroPicture2", 0.1, { scale: 1, ease: Power0.easeNone })  // scale up but still not shown.
+        .to("#LegendText4", 8.0, { top: -250, ease: Power0.easeNone }, "-= 3.0") // scroll text
+        .to("#LegendText5", 8.0, { top: -250, ease: Power0.easeNone }, "-= 3.0") // scroll text
+        .to("#LegendText6", 8.0, { top: -250, ease: Power0.easeNone }, "-= 3.0") // scroll text
+        .to("#IntroPicture1", 3.0, { opacity: 0, ease: Power0.easeNone }, "-= 3.0") // fade out first image
+        .to("#IntroPicture2", 3.0, { opacity: 1, ease: Power0.easeNone }, "-= 1.0") // fade in second image
+        .to("#LegendText7", 8.0, { top: -250, ease: Power0.easeNone }, "-= 1.5") // scroll text over fadin
+        .to("#LegendText8", 8.0, { top: -250, ease: Power0.easeNone }, "-= 3.0") // scroll text
+        .to("#LegendText9", 8.0, { top: -250, ease: Power0.easeNone }, "-= 3.0") // scroll text
+        .to("#LegendText10", 8.0, { top: -250, ease: Power0.easeNone }, "-= 3.0") // scroll text
+        .to("#IntroPicture1", 0.1, { backgroundImage: "url('images/RiverCut.jpg')", ease: Power0.easeNone }) // switch to travel river.
+        .to("#LegendText11", 8.0, { top: -250, ease: Power0.easeNone }, "-= 3.0") // scroll text
+        .to("#IntroPicture2", 3.0, { opacity: 0, ease: Power0.easeNone }, "-= 3.0") // fade out country river image
+        .to("#IntroPicture1", 3.0, { opacity: 1, ease: Power0.easeNone }, "-= 1.0") // fade in rivercut image
+        .to("#LegendText12", 8.0, { top: -250, ease: Power0.easeNone }, "-= 3.0") // scroll text
+        .to("#IntroPicture2", 0.1, { backgroundImage: "url('images/RiverSunset.jpg')", ease: Power0.easeNone }) // switch to sunset
+        .to("#LegendText13", 8.0, { top: -250, ease: Power0.easeNone }) // scroll text
+        .to("#IntroPicture1", 3.0, { opacity: 0, ease: Power0.easeNone }, "-= 3.0") // fade out river cut image
+        .to("#IntroPicture2", 3.0, { opacity: 1, ease: Power0.easeNone }, "-= 1.0") // fade in sunset image
+        .to("#LegendText14", 8.0, { top: -250, ease: Power0.easeNone }, "-= 3.0") // scroll text
+        .to("#IntroPicture1", 0.1, { backgroundImage: "url('images/OutsideWaterfall.jpg')", ease: Power0.easeNone }) // switch to mountain stream
+        .to("#IntroPicture2", 3.0, { opacity: 0, ease: Power0.easeNone }) // fade out sunset image
+        .to("#IntroPicture1", 3.0, { opacity: 1, ease: Power0.easeNone }, "-= 1.0") // fade in moutain stream image
+        .to("#IntroPicture2", 0.1, { backgroundImage: "url('images/mountainStream.jpg')", ease: Power0.easeNone }) // switch to waterfa;;
+        .to("#IntroPicture1", 3.0, { opacity: 0, ease: Power0.easeNone }) // fade out mountain stream image
+        .to("#IntroPicture2", 3.0, { opacity: 1, ease: Power0.easeNone }, "-= 1.0") // fade in waterfall image
+        .to("#IntroPicture1", 0.1, { backgroundImage: "url('images/FaceInClif.jpg')", ease: Power0.easeNone }) // switch to face cliff
+        .to("#IntroPicture2", 3.0, { opacity: 0, ease: Power0.easeNone }) // fade out waterfall image
+        .to("#IntroPicture1", 3.0, { opacity: 1, ease: Power0.easeNone }, "-= 1.0") // fade in face in cliff image
+        .to("#LegendText15", 8.0, { top: -250, ease: Power0.easeNone }, "-= 3.0") // scroll text
+        .to("#IntroPicture2", 0.1, { backgroundImage: "url('images/TopOfTheWorld.jpg')", ease: Power0.easeNone }) // switch to top of the world
+        .to("#IntroPicture1", 3.0, { opacity: 0, ease: Power0.easeNone }) // fade out face in clif image
+        .to("#IntroPicture2", 3.0, { opacity: 1, ease: Power0.easeNone }, "-= 1.0") // fade in top of the world image
+        .to("#LegendText16", 8.0, { top: -250, ease: Power0.easeNone }, "-= 3.0") // scroll text
+        .to("#IntroPicture1", 0.1, { backgroundImage: "url('images/CrackedEarth.jpg')", ease: Power0.easeNone }) // switch to CrackedEarth
+        .to("#IntroPicture2", 3.0, { opacity: 0, ease: Power0.easeNone }) // fade out top of world image
+        .to("#IntroPicture1", 3.0, { opacity: 1, ease: Power0.easeNone }, "-= 1.0") // fade crackedEarth image
+        .to("#LegendText17", 8.0, { top: -250, ease: Power0.easeNone }, "-= 3.0") // scroll text
+        .to("#LegendText18", 8.0, { top: -250, ease: Power0.easeNone }, "-= 3.0") // scroll text
+
+
+        // need to have new audio here..
+
+        .call(() => {
+            overlayAudio.pause();
+            overlayAudio.setAttribute("src", OtherSounds[10]);
+            overlayAudio.currentTime = 0;
+            overlayAudio.loop = true;
+            overlayAudio.volume = 0.7;
+            overlayAudio.play();
+        }, [], this, "-=0.0")
+
+
+        // start the shaking and expansion..
+        .to("#IntroPicture1", 0.2, { top: -5, left: -5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: 5, left: 5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: -5, left: 10, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: 5, left: -5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: -5, left: -5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: 5, left: 5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: -5, left: 10, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: 5, left: -5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: -5, left: -5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: 5, left: 5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: -5, left: 10, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: 5, left: -5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: -5, left: -5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: 5, left: 5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: -5, left: 10, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: 5, left: -5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: -5, left: -5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: 5, left: 5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: -5, left: 10, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: 5, left: -5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: -5, left: -5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: 5, left: 5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: -5, left: 10, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: 5, left: -5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: -5, left: -5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: 5, left: 5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: -5, left: 10, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: 5, left: -5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: -5, left: -5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: 5, left: 5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: -5, left: 10, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: 5, left: -5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: -5, left: -5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: 5, left: 5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: -5, left: 10, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: 5, left: -5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: -5, left: -5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: 5, left: 5, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: -5, left: 10, ease: Power0.easeNone })
+        .to("#IntroPicture1", 0.2, { top: 5, left: -5, ease: Power0.easeNone })
+
+        // plung to darkness
+        .to("#IntroPicture1", 2.0, { opacity: 0, scale: 120, ease: Power0.easeNone }, "-= 1.0")
+        .call(function () {
+            overlayAudio.pause();
+            overlayAudio.setAttribute("src", OtherSounds[3]);
+            overlayAudio.currentTime = 0;
+            overlayAudio.loop = false;
+            overlayAudio.volume = 0.5;
+            overlayAudio.play();
+        }, [], this, "-=2.0")
+
+        .to("#LegendText19", 8.0, { top: -250, ease: Power0.easeNone }, "-=1.0") // scroll final text
+
+        // So, here is the problem: it seems this timeline tween thing sticks around, intact, AFTER the function ends.  
+        // In fact, if the animation has not ended, it will continue after the function returns.
+        // IF i add a "kill()" at the end, it kills the whole thing and never plays anything, even though the kill is at the end...
+        // So, the only recourse is to use the tween to reset the objects like the picture sources and the text locations back to 
+        // the starting postions or it just won't run the second time... sigh...
+        // what's also sad is that if this was set to repeat, I don't think you would have to do any of this cleanup.
+
+        .to("#IntroStartPicture", 0.1, { display: "block", ease: Power0.easeNone })  // restore starting picture
+        .to("#IntroPicture1", 0.01, { top: 0, left: 0, display: "none", backgroundImage: "url('images/Amethyst.jpg')", ease: Power0.easeNone })
+        .to("#IntroPicture2", 0.01, { display: "none", backgroundImage: "url('images/creekThroughPastureland.jpg')", ease: Power0.easeNone })
+
+        // we have to hide the text, then move it, then unhide.  Otherwise it causes flashing on the screen.
+        // first hide:
+        .to("#LegendText1", 0.01, { display: "none", ease: Power0.easeNone })
+        .to("#LegendText2", 0.01, { display: "none", ease: Power0.easeNone })
+        .to("#LegendText3", 0.01, { display: "none", ease: Power0.easeNone })
+        .to("#LegendText4", 0.01, { display: "none", ease: Power0.easeNone })
+        .to("#LegendText5", 0.01, { display: "none", ease: Power0.easeNone })
+        .to("#LegendText6", 0.01, { display: "none", ease: Power0.easeNone })
+        .to("#LegendText7", 0.01, { display: "none", ease: Power0.easeNone })
+        .to("#LegendText8", 0.01, { display: "none", ease: Power0.easeNone })
+        .to("#LegendText9", 0.01, { display: "none", ease: Power0.easeNone })
+        .to("#LegendText10", 0.01, { display: "none", ease: Power0.easeNone })
+        .to("#LegendText11", 0.01, { display: "none", ease: Power0.easeNone })
+        .to("#LegendText12", 0.01, { display: "none", ease: Power0.easeNone })
+        .to("#LegendText13", 0.01, { display: "none", ease: Power0.easeNone })
+        .to("#LegendText14", 0.01, { display: "none", ease: Power0.easeNone })
+        .to("#LegendText15", 0.01, { display: "none", ease: Power0.easeNone })
+        .to("#LegendText16", 0.01, { display: "none", ease: Power0.easeNone })
+        .to("#LegendText17", 0.01, { display: "none", ease: Power0.easeNone })
+        .to("#LegendText18", 0.01, { display: "none", ease: Power0.easeNone })
+        .to("#LegendText19", 0.01, { display: "none", ease: Power0.easeNone })
+
+
+        // now move.
+        .to("#LegendText1", 0.01, { top: 700, ease: Power0.easeNone })
+        .to("#LegendText2", 0.01, { top: 700, ease: Power0.easeNone })
+        .to("#LegendText3", 0.01, { top: 700, ease: Power0.easeNone })
+        .to("#LegendText4", 0.01, { top: 700, ease: Power0.easeNone })
+        .to("#LegendText5", 0.01, { top: 700, ease: Power0.easeNone })
+        .to("#LegendText6", 0.01, { top: 700, ease: Power0.easeNone })
+        .to("#LegendText7", 0.01, { top: 700, ease: Power0.easeNone })
+        .to("#LegendText8", 0.01, { top: 700, ease: Power0.easeNone })
+        .to("#LegendText9", 0.01, { top: 700, ease: Power0.easeNone })
+        .to("#LegendText10", 0.01, { top: 700, ease: Power0.easeNone })
+        .to("#LegendText11", 0.01, { top: 700, ease: Power0.easeNone })
+        .to("#LegendText12", 0.01, { top: 700, ease: Power0.easeNone })
+        .to("#LegendText13", 0.01, { top: 700, ease: Power0.easeNone })
+        .to("#LegendText14", 0.01, { top: 700, ease: Power0.easeNone })
+        .to("#LegendText15", 0.01, { top: 700, ease: Power0.easeNone })
+        .to("#LegendText16", 0.01, { top: 700, ease: Power0.easeNone })
+        .to("#LegendText17", 0.01, { top: 700, ease: Power0.easeNone })
+        .to("#LegendText18", 0.01, { top: 700, ease: Power0.easeNone })
+        .to("#LegendText19", 0.01, { top: 700, ease: Power0.easeNone })
+
+
+        // now reset display
+        .to("#LegendText1", 0.01, { display: "initial", ease: Power0.easeNone })
+        .to("#LegendText2", 0.01, { display: "initial", ease: Power0.easeNone })
+        .to("#LegendText3", 0.01, { display: "initial", ease: Power0.easeNone })
+        .to("#LegendText4", 0.01, { display: "initial", ease: Power0.easeNone })
+        .to("#LegendText5", 0.01, { display: "initial", ease: Power0.easeNone })
+        .to("#LegendText6", 0.01, { display: "initial", ease: Power0.easeNone })
+        .to("#LegendText7", 0.01, { display: "initial", ease: Power0.easeNone })
+        .to("#LegendText8", 0.01, { display: "initial", ease: Power0.easeNone })
+        .to("#LegendText9", 0.01, { display: "initial", ease: Power0.easeNone })
+        .to("#LegendText10", 0.01, { display: "initial", ease: Power0.easeNone })
+        .to("#LegendText11", 0.01, { display: "initial", ease: Power0.easeNone })
+        .to("#LegendText12", 0.01, { display: "initial", ease: Power0.easeNone })
+        .to("#LegendText13", 0.01, { display: "initial", ease: Power0.easeNone })
+        .to("#LegendText14", 0.01, { display: "initial", ease: Power0.easeNone })
+        .to("#LegendText15", 0.01, { display: "initial", ease: Power0.easeNone })
+        .to("#LegendText16", 0.01, { display: "initial", ease: Power0.easeNone })
+        .to("#LegendText17", 0.01, { display: "initial", ease: Power0.easeNone })
+        .to("#LegendText18", 0.01, { display: "initial", ease: Power0.easeNone })
+        .to("#LegendText19", 0.01, { display: "initial", ease: Power0.easeNone })
+
+
+        // enable start adventure button:
+        .to("#Adventure", 0.5, { hidden: false, disabled: false, ease: Power0.easeNone });
+
+
+} // end runIntroduction
 
 
 
@@ -269,10 +609,28 @@ function init() {
 //-----------------------------------------------------------------------------------------
 function startAdventureHandler() {
     "use strict";
+    console.log("in start Adventure");
+
     // Hide the intro screen, show the game screen
     introScreen.style.display = "none";
     gameScreen.style.display = "block";
     helpScreen.style.display = "none";
+
+    bIntroScreen = false;
+    bHelpScreen = false;
+
+    overlayAudio.pause();
+    overlayAudio.currentTime = 0;
+
+
+    // start main audio
+    mainAudio.setAttribute("src", map[mapLocation][2]);
+    mainAudio.currentTime = 0;
+    mainAudio.loop = true;
+    mainAudio.play();
+
+    console.log("leaving start adventure");
+
 }// end start Game Handler.
 
 
@@ -288,6 +646,8 @@ function helpMeHandler() {
     introScreen.style.display = "none";
     gameScreen.style.display = "none";
     helpScreen.style.display = "block";
+
+    bHelpScreen = true;
 }// end helpMeHandler
 
 
@@ -303,7 +663,37 @@ function resumeGameHandler() {
     introScreen.style.display = "none";
     gameScreen.style.display = "block";
     helpScreen.style.display = "none";
+
+    bIntroScreen = false;
+    bHelpScreen = false;
+
+    // restart main audio
+    mainAudio.setAttribute("src", map[mapLocation][2]);
+    mainAudio.currentTime = 0;
+    mainAudio.loop = true;
+    mainAudio.play();
+
 }// end resumeGameHandler
+
+
+//-----------------------------------------------------
+//  newGame:
+//       Called by button handler 
+//       
+//       Reinitializes and restarts game
+//
+//-----------------------------------------------------
+function newGame() {
+    "use strict";
+
+    // Call init then reset to intro screen.
+    init();
+
+    // Hide the intro screen, show the game screen
+    introScreen.style.display = "block";
+    gameScreen.style.display = "none";
+
+}// end loadGame
 
 
 
@@ -315,12 +705,14 @@ function resumeGameHandler() {
 //-----------------------------------------------------------------------------------------
 function keydownHandler(event) {
     // looking for the enter key...
-   
+    "use strict";
+
     if (event.keyCode === 13) {
         playGame();
     }
 
 }// end keydown handler
+
 
 
 
@@ -333,6 +725,7 @@ function keydownHandler(event) {
 //       and re-displaying game screen based on it all.
 //-----------------------------------------------------
 function playGame() {
+    "use strict";
 
     // reset previous turns variables:
     gameMessage = "";
@@ -361,7 +754,7 @@ function playGame() {
     let i = 0;
     let loopEnd = actionsIKnow.length;
 
-    for (i = 0; i < loopEnd; i++) {
+    for (i = 0; i < loopEnd; i += 1) {
         // if what the player put in is a valid game action then..
         if (playersInput.indexOf(actionsIKnow[i]) !== -1) {
             action = actionsIKnow[i];
@@ -375,17 +768,68 @@ function playGame() {
     loopEnd = itemsIKnow.length;  // reset loopEnd
     console.log("loopEnd for items is: " + loopEnd);
 
-    for (i = 0; i < loopEnd; i++) {
+    for (i = 0; i < loopEnd; i += 1) {
         if (playersInput.indexOf(itemsIKnow[i]) !== -1) {
             currentItem = itemsIKnow[i];
-            console.log("player's item selection: " + currentItem);
+            console.log(`player's item selection:  ${currentItem}`);
             break;
         }
 
     }// end for items loop
 
+    // Short circut movement if currently in magical maze cave.
+    let testDirection = "northsoutheastwest";
+    if (mapLocation === 4 && testDirection.includes(action) && action != "ronaustin") {
+        // in maze cave, made movement direction a random direction including staying here..
+        // 1=4 are north, south, east, west respecively.  5 is stay here.
+
+        console.log("in maze cave action if");
+
+        let myNumber = myRandom(5);
+        switch (myNumber) {
+            case 1:
+                action = "north";
+                break;
+
+            case 2:
+                action = "south";
+                break;
+
+            case 3:
+                action = "east";
+                break;
+
+            case 4:
+                action = "west";
+                break;
+
+            case 5:
+                action = "lost";
+                break;
+
+            default:
+                action = "lost";
+
+        }// end switch myRandom
+
+        console.log(`in maze if after random.  new action is: ${action}`);
+    }// end if in maze cave short circut
+    else if (action == "ronaustin") {
+        action = "north";
+    }
+
+
+
     // the big switch for the action:  NOTE:  this will change some when the map size increases.
     switch (action) {
+        case "lost":
+            // lost in the maze cave
+            mapLocation = 4;
+            previousMapLocation = mapLocation;
+            break;
+
+
+
         case "north":
             if (mapLocation >= 3) {
                 switch (mapLocation) {
@@ -653,7 +1097,6 @@ function playGame() {
         default:
             gameMessage = "Sorry, I don't understand that.";
 
-
     } // end big switch
 
 
@@ -672,7 +1115,7 @@ function playGame() {
 //
 //-----------------------------------------------------
 function takeItem() {
-
+    "use strict";
     // Get currentItem index number in the itemsInWorld array.  Use it to verify
     // that the item actually exists at the players location.  If so, remove from world
     // and add to players backpack.
@@ -687,19 +1130,47 @@ function takeItem() {
 
         // monster check
         if (mapLocation === 3 && bJellyMonsterAlive) { // jelly monster!
-            gameMessage = "The " + currentItem + " is embedded in the Jelly.  The jelly burns your hands when you try to get it.";
+            gameMessage = `The ${currentItem} is embedded in the Jelly.  The jelly burns your hands when you try to get it.`;
+            Player.hitpoints -= 1;
+            if (Player.hitpoints <= 0) {
+                // died from jelly burns
+                Player.bAlive = false;
+                Player.deathReason = "JellyBurns";
+                endGameReason = "JellyBurns";
+            }
+
         }
         else if (MonsterInTheDark.location === mapLocation && MonsterInTheDark.bAlive) { // Monster in the dark!
-            endGameReason = "MonsterInDark";
+            // surprise hit by monster with no fish decoy! 
+            gameMessage = `You try to get the ${currentItem} but a HUGE Monster charges out of the dark and attacks you!`;
+            overlayAudio.pause();
+            overlayAudio.setAttribute("src", OtherSounds[4]);
+            overlayAudio.currentTime = 0;
+            overlayAudio.play();
+
+            if (!Player.armor) {
+                Player.hitpoints -= 8;
+            }
+            else {
+                Player.hitpoints -= 2;
+            }
+
+            if (Player.hitpoints <= 0) {
+                // died from monster hit
+                Player.bAlive = false;
+                Player.deathReason = "MonsterInDark";
+                endGameReason = "MonsterInDark";
+            }
+
         }
         else {
 
-            // ok, remove from world if NOT salt:
-            if (currentItem != "salt") {
-                // cant run out of salt
+            // ok, remove from world if NOT salt or fish:
+            if (currentItem != "salt" && currentItem != "fish") {
+                // cant run out of salt or fish
 
                 // if gem, only one allowed in pack
-                if (currentItem === "glowing gem" && (backpack.indexOf("glowing gem") !== -1) ) {
+                if (currentItem === "glowing gem" && (backpack.indexOf("glowing gem") !== -1)) {
                     gameMessage = "Wait, you already have a HUGE glowing gem.  You don't have room in your pack for another.";
                 }
                 else {
@@ -709,10 +1180,10 @@ function takeItem() {
 
             }// end if not salt
 
-           
+
             // put in pack and display message to player
             // if gem, only one allowed in pack
-            if (currentItem === "glowing gem" && (backpack.indexOf("glowing gem") !== -1) ){
+            if (currentItem === "glowing gem" && (backpack.indexOf("glowing gem") !== -1)) {
                 gameMessage = "Wait, you already have a HUGE glowing gem.  You don't have room in your pack for another.";
             }
             else {
@@ -720,7 +1191,7 @@ function takeItem() {
                 gameMessage = "You take the " + currentItem + ".";
 
                 // add notes to console.log for debug
-                console.log("Player took " + currentItem + " from " + mapLocation);
+                console.log(`Player took ${currentItem} from ${mapLocation}`);
                 console.log("Player's backpack now holds: " + backpack);
                 console.log("Items in World are now: " + itemsInWorld);
                 console.log("Item locations in world are now: " + itemLocations);
@@ -747,7 +1218,7 @@ function takeItem() {
 //
 //-----------------------------------------------------
 function dropItem() {
-
+    "use strict";
     // First check to make sure backpack isn't empty.  If it isn't, get currentItem index 
     // number in the players backpack. Remove the item from the backpack, add it to the
     // world items array and add it's location to the world items location array.  Finally
@@ -764,19 +1235,19 @@ function dropItem() {
             backpack.splice(itemIndex, 1);
 
             //if it is salt, and location is 6 (lava / salt pit) then don't add to world.
-            if ( !(mapLocation === 6 && currentItem === "salt") ) {
+            if (!(mapLocation === 6 && currentItem === "salt")) {
                 itemsInWorld.push(currentItem);
                 itemLocations.push(mapLocation);
             }
 
             // tell player they dropped it.
-            gameMessage = "You dropped the " + currentItem + ".";
+            gameMessage = `You dropped the ${currentItem}.`;
 
             // if its the lantern, douse the light!
             if (currentItem === "lantern") {
                 bLanternInUse = false;
             }
- 
+
         }
         else {
             // item not in back pack
@@ -804,7 +1275,7 @@ function dropItem() {
 //
 //-----------------------------------------------------
 function useItem() {
-
+    "use strict";
     // First check to make sure backpack isn't empty.  If it isn't, get currentItem index 
     // number in the players backpack. It it exists in the backpack, then try to use it at 
     // the players location.  Modify the world items and backpack items appropriately if using
@@ -817,6 +1288,11 @@ function useItem() {
 
     let bItemUsedUp = false;  // bool for if item is destroyed.
     let bItemPlaced = false;  // bool for if item is placed in world by using.
+
+    // hit vars for combat with monster
+    let playersHit = 0;
+    let monsterHit = 0;
+
 
     if (backpack.length != 0) {
 
@@ -863,13 +1339,13 @@ function useItem() {
 
 
                 case "plate armor":
-                    if (!bArmorOn) {
+                    if (!Player.armor) {
                         gameMessage = "You put the plate armor on.  You feel invinceable!... and, well, a bit heavy.";
-                        bArmorOn = true;
+                        Player.armor = true;
                     }
                     else {
                         gameMessage = "You take the plate armor off.  You feel much lighter and well, kinda bare.";
-                        bArmorOn = false;
+                        Player.armor = false;
                     }
                     break;
 
@@ -877,19 +1353,52 @@ function useItem() {
                 case "sword":
                     if (mapLocation === MonsterInTheDark.location && MonsterInTheDark.bAlive) {
                         // attacking Monster in the dark!!
-                        if (bArmorOn) {
-                            // we are good to go!  Kill it!
-                            gameMessage = "You attack the Monster lurking in the dark.  It's a tough fight but your armor saves you.  The Monster is dead!";
-                            MonsterInTheDark.bAlive = false;
-                        }
-                        else {
-                            // no armor.. won't die but won't feel good.
-                            gameMessage = "You attack the Monster lurking in the dark.  It's a tough fight and the Monster wounds you gravely.  The Monster is still alive!";
+                        playersHit = myRandom(1 * Player.swordSkill);
+                        monsterHit = myRandom(20);  // armor helps!
+
+                        if (Player.armor) {
+                            // Nice to have armor
+
+                            monsterHit -= 16;  // armor helps!
+                            if (monsterHit < 0) {
+                                monsterHit = 1;  // have to take some damage!
+                            }
                         }
 
-                    }// end where the Monster is.
+                        // set up audio:
+
+                        fightAudio.currentTime = 0;
+
+                        overlayAudio.pause();
+                        overlayAudio.setAttribute("src", OtherSounds[4]);
+                        overlayAudio.currentTime = 0;
+                        overlayAudio.play();
+                        fightAudio.play();
+
+                        // take hits
+                        Player.hitpoints -= monsterHit;
+                        MonsterInTheDark.hitpoints -= playersHit;
+
+                        // see whose still alive
+                        if (Player.hitpoints <= 0) {
+                            Player.bAlive = false;
+                            Player.deathReason = "MonsterInDarkFight";
+                            endGameReason = "MonsterInDarkFight";
+
+                            gameMessage = `You hit the monster and it hit you... Sadly your body couldn't take it.`;
+                        }
+                        else if (MonsterInTheDark.hitpoints <= 0) {
+                            MonsterInTheDark.bAlive = false;
+                            gameMessage = "You attack the Monster lurking in the dark.  It's a tough fight but your armor saves you.  The Monster is dead!";
+                        }
+                        else {
+                            gameMessage = "You and the Monster lurking in the dark duke it out. You are both bleeding, but both still standing.";
+                        }
+
+                    }// end if where the Monster is.
                     else {
-                        gameMessage = "You swing the sword in great arcs.  You think you could do some damage with this.";
+                        gameMessage = "You practice with the sword.";
+                        Player.swordSkill += 2;
                     }
                     break; // end sword switch
 
@@ -935,8 +1444,38 @@ function useItem() {
                     break;
 
 
-                case "item8":
-                    gameMessage = "using " + currentItem + ".";
+                case "fish":
+                    if (backpack.indexOf("fish") != -1) {
+
+                        if (mapLocation === MonsterInTheDark.location && MonsterInTheDark.bAlive) {
+                            //oops, cooking near a hungry monster....
+                            gameMessage = `You start to cook the ${currentItem} but the Monster is hungry too and surprises you! Happily it decided on fish dinner rather than eatting you.`;
+                            overlayAudio.pause();
+                            overlayAudio.setAttribute("src", OtherSounds[4]);
+                            overlayAudio.currentTime = 0;
+                            overlayAudio.play();
+
+                            if (!Player.armor) {
+                                Player.hitpoints -= 2;
+                            }
+
+                            if (Player.hitpoints <= 0) {
+                                // died from monster hit
+                                Player.bAlive = false;
+                                Player.deathReason = "MonsterInDark";
+                                endGameReason = "MonsterInDark";
+                            }
+
+                        }
+                        else {
+                            // not where monster is. so ok.
+                            gameMessage = `You cook the ${currentItem} and eat it.  You feel a lot better now.`;
+                            Player.hitpoints = 10;
+                        }
+
+                        bItemUsedUp = true;
+                    }
+
                     break;
 
                 case "item9":
@@ -951,12 +1490,14 @@ function useItem() {
             if (bItemUsedUp) {
                 // remove from backpack and world
                 backpack.splice(itemIndex, 1);
+                bItemUsedUp = false;
             }
             else if (bItemPlaced) {
                 // remove from pack, place in world.
                 backpack.splice(itemIndex, 1);
                 itemsInWorld.push(currentItem);
                 itemLocations.push(mapLocation);
+                bItemPlaced = false;
             }
 
         }// end if item in backpack
@@ -985,7 +1526,20 @@ function useItem() {
 //
 //-----------------------------------------------------
 function renderGame() {
+    //OtherSounds[0] = "audio/Africa.mp3";  // main opening game song
+    //OtherSounds[1] = "audio/forest_fire.mp3"; // to overlay with lava in lava cave
+    //OtherSounds[2] = "audio/gravelwalk.mp3"; // main area transition sound
+    //OtherSounds[3] = "audio/FallingToDeath.mp3";  // you fall to your death
+    //OtherSounds[4] = "audio/Monster_Footsteps.mp3"; // for monster attack and or follow
+    //OtherSounds[5] = "audio/Blade_Combat.mp3";  // player attacks monster with sword
+    //OtherSounds[6] = "audio/MonsterFarAway.mp3";  // monster is far away
+    //OtherSounds[7] = "audio/MonsterInSameRoom.mp3";  // monster is in YOUR cave room!!
+    //OtherSounds[8] = "audio/Drowning.mp3";  // You Drown
+    //OtherSounds[9] = "audio/MonsterTearFlesh.mp3";  // monster is eatting you.
+    //OtherSounds[10] = "audio/EarthQuake.mp3";  // Earthquake!
+    //OtherSounds[11] = "audio/HotSizzling.mp3";  // Jelly Monster Sizzle!
 
+    "use strict";
 
     // reinit outputs:
     output.innerHTML = "";
@@ -996,35 +1550,64 @@ function renderGame() {
         // end game!
         switch (endGameReason) {
             case "SeaMonster": // got eaten by seamonster.
+                overlayAudio.setAttribute("src", OtherSounds[9]);
                 output.innerHTML = "You try to swim across to the other side.   ALAS!  A Sea Monster ATE YOU!! <br> GAME OVER";
                 screenImage.style.backgroundImage = SeaMonster;
                 break;
 
+            case "JellyBurns": // got eaten by seamonster.
+                overlayAudio.setAttribute("src", OtherSounds[11]);
+                output.innerHTML = "You were too weak.  The Jelly on the walls burns you to death. <br> GAME OVER";
+                screenImage.style.backgroundImage = Skull;
+                break;
+
             case "armor drowning": // armor too heavy and you drowned
+                overlayAudio.setAttribute("src", OtherSounds[8]);
                 output.innerHTML = "You try to swim across to the other side.  ALAS! The armor you have drags you under and you drown! <br> GAME OVER";
                 screenImage.style.backgroundImage = Drowned;
                 break;
 
             case "MonsterInDark":
+                overlayAudio.setAttribute("src", OtherSounds[4]);
                 output.innerHTML = "The Monster lurking in the dark charges out and EATS YOU!!  <br>   GAME OVER";
                 screenImage.style.backgroundImage = MonsterInDark;
                 break;
 
+            case "MonsterInDarkFight":
+                overlayAudio.setAttribute("src", OtherSounds[4]);
+                output.innerHTML = "You hit the monster and it HIT you... Sadly your body couldn't take it.  <br>   GAME OVER";
+                screenImage.style.backgroundImage = MonsterInDark;
+                break;
+
             case "Dark Cliff":
-                output.innerHTML = "You wander around in the dark and step into nothingness!  You fall to your DEATH!  <br>   GAME OVER";
+                overlayAudio.setAttribute("src", OtherSounds[3]);
+                output.innerHTML = `You wander around in the dark and step into nothingness!  You fall to your DEATH!
+  GAME OVER`;
                 screenImage.style.backgroundImage = Skull;
                 break;
 
             case "Reached Exit":
+                overlayAudio.setAttribute("src", OtherSounds[0]);
                 output.innerHTML = "Fresh air fills your lungs as the outside breeze flows over you!  You made it!  <br> ";
                 screenImage.style.backgroundImage = TheExit;
                 break;
 
             default: // should not get here ever but...
-                output.innerHTML = "You stumbled and skewered yourself on a stalagmite!  Sadly you are dead!  <br>   GAME OVER";
+                overlayAudio.setAttribute("src", OtherSounds[3]);
+                output.innerHTML = `You stumbled and skewered yourself on a stalagmite!  Sadly you are dead!
+ GAME OVER`;
                 screenImage.style.backgroundImage = Skull;
 
         }// end switch endgame
+
+
+        // end main audio:
+        mainAudio.pause();
+
+        // play overlay audio:
+        overlayAudio.currentTime = 0;
+        overlayAudio.play();
+
 
         // disable and hide all buttons except load and new game.
         playButton.disabled = true;
@@ -1045,8 +1628,17 @@ function renderGame() {
 
 
         // IF the lantern is not on,  and not in a location with a light source, then player only sees the black!
-        if (!bLanternInUse && mapLocation != 6 && mapLocation != 4 && mapLocation != 2 && mapLocation != 0) {
+        if (!bLanternInUse && mapLocation != 6 && mapLocation != 2 && mapLocation != 0) {
             screenImage.style.backgroundImage = TheDark;
+
+
+            if (MonsterInTheDark.location === mapLocation && MonsterInTheDark.bAlive) {
+                // monster here!
+                overlayAudio.setAttribute("src", OtherSounds[7]);
+                overlayAudio.currentTime = 0;
+                overlayAudio.play();
+            }
+
             gameMessage = "It is pitch black.  You can't see anything.";
             output.innerHTML = map[mapLocation][1];  // in the dark description
             console.log("in dark if.  screenImage is: " + screenImage.style.backgroundImage);
@@ -1057,17 +1649,29 @@ function renderGame() {
             screenImage.style.backgroundImage = locationImages[mapLocation];
             output.innerHTML = map[mapLocation][0];  // in the light description
 
+            // check for magic haze location:
+            if (mapLocation === 4) {
+                console.log("in magic haze location check");
+                magicHaze.style.display = "block";
+            }
+            else {
+                magicHaze.style.display = "none";
+            }
+
 
             // monster check:
             if (MonsterInTheDark.location === mapLocation && MonsterInTheDark.bAlive) {
                 // monster here!
+                overlayAudio.setAttribute("src", OtherSounds[7]);
+                overlayAudio.currentTime = 0;
+                overlayAudio.play();
                 output2.innerHTML += "<br> You think you see something LARGE moving in the dark shadows.";
             }
 
 
             let i = 0;
             //show items if they are there at this location
-            for (i = 0; i < itemsInWorld.length; i++) {
+            for (i = 0; i < itemsInWorld.length; i += 1) {
                 if (mapLocation === itemLocations[i]) {
                     // display item
                     output.innerHTML += "<br> You see a <strong>" + itemsInWorld[i] + "</strong> here.";
@@ -1079,10 +1683,46 @@ function renderGame() {
         output2.innerHTML += "<br> <em> " + gameMessage + " </em> ";
 
 
-        // finally show players backpack contents:
+        //  show players backpack contents:
         if (backpack.length != 0) {
             output.innerHTML += "<br> You are carrying: <strong>" + backpack.join(", ") + "</strong>";
         }
+
+        // Lastly show Players hit points
+        if (Player.hitpoints < 3) {
+            output.innerHTML += "<br>  You are horribly wounded! You only have: <bleeding>" + Player.hitpoints + "</bleeding> hit points left!";
+        }
+        else if (Player.hitpoints < 6) {
+            output.innerHTML += "<br>  You are seriously wounded! You only have: <bleeding>" + Player.hitpoints + "</bleeding> hit points left!";
+        }
+        else if (Player.hitpoints < 8) {
+            output.innerHTML += "<br>  You are wounded. You have: <bleeding>" + Player.hitpoints + "</bleeding> hit points left!";
+        }
+        else if (Player.hitpoints < 10) {
+            output.innerHTML += "<br> You have: <strong>" + Player.hitpoints + "</strong> hit points left!";
+        }
+        else {
+            output.innerHTML += "<br> You have: <strong>" + Player.hitpoints + "</strong> hit points.";
+        }
+
+
+        // reset audio ONLY if we are in main game screen.
+        mainAudio.pause();
+        console.log(`bintro: ${bIntroScreen} and bhelp: ${bHelpScreen}`);
+        if (!bIntroScreen && !bHelpScreen) {
+            console.log(`in render in make new main sound section: bintro: ${bIntroScreen} and bhelp: ${bHelpScreen}`);
+            mainAudio.setAttribute("src", map[mapLocation][2]);
+            mainAudio.currentTime = 0;
+            mainAudio.loop = true;
+            mainAudio.play();
+
+            // check for random area sound of monster.. 33% of time..
+            if (MonsterInTheDark.bAlive && (MonsterInTheDark.location != mapLocation) && (myRandom(6) > 4)) {
+                overlayAudio.setAttribute("src", OtherSounds[6]);
+                overlayAudio.currentTime = 0;
+                setTimeout(function () { overlayAudio.play(); }, 2000);
+            }
+        } // end if in main game screen.
 
 
     }// end else not end game.
@@ -1102,6 +1742,7 @@ function renderGame() {
 //
 //-----------------------------------------------------
 function saveGame() {
+    "use strict";
 
     // create an object to put into JSON.stringify(obj);
     // temp gameStateObject
@@ -1116,7 +1757,7 @@ function saveGame() {
         saveMonsterInTheDark: MonsterInTheDark, // must kill to get pick axe.
         saveEndGameReason: endGameReason,  // game not ended
         savebGateOpen: bGateOpen,   // is the exit gate open?
-        savebArmorOn: bArmorOn   // does the player have the armor on?
+        savePlayer: Player   // save the Player object
     }; // end temp game state obj creation.
 
     // stringify it all then save in local storage
@@ -1137,6 +1778,7 @@ function saveGame() {
 //
 //-----------------------------------------------------
 function loadGame() {
+    "use strict";
 
     // temp gameStateObject
     let gameStateObject = null;
@@ -1183,8 +1825,8 @@ function loadGame() {
     bGateOpen = gameStateObject.savebGateOpen;
     console.log("bGateOpen: " + gameStateObject.savebGateOpen);
 
-    bArmorOn = gameStateObject.savebArmorOn;
-    console.log("bArmorOn: " + gameStateObject.savebArmorOn);
+    Player = gameStateObject.savePlayer;
+    console.log("player: " + gameStateObject.savePlayer);
 
 
     // make sure all buttons available if not end of game.
@@ -1211,23 +1853,6 @@ function loadGame() {
 
 
 
-//-----------------------------------------------------
-//  newGame:
-//       Called by button handler 
-//       
-//       Reinitializes and restarts game
-//
-//-----------------------------------------------------
-function newGame() {
-
-    // Call init then reset to intro screen.
-    init();
-
-    // Hide the intro screen, show the game screen
-    introScreen.style.display = "block";
-    gameScreen.style.display = "none";
-
-}// end loadGame
 
 
 
@@ -1239,6 +1864,7 @@ function newGame() {
 //
 //-----------------------------------------------------
 function swimLake() {
+    "use strict";
 
     let monsterChance = 50; // chance for seamonster to eat you.
     let swimChance = 75;   // chance for player to successfully swim it.
@@ -1256,7 +1882,7 @@ function swimLake() {
             // ugg, you are weighed down with armor!
             console.log("weighed down.. initial swim roll: " + swimRoll);
             swimChance = 25;  // armor weighs you down!
-           
+
             if (swimRoll > swimChance) // you drown!
             {
                 endGameReason = "armor drowning";
@@ -1294,6 +1920,7 @@ function swimLake() {
 //      
 //-----------------------------------------------------
 function myRandom(inNumber) {
+    "use strict";
 
     let randNum = Math.floor(Math.random() * inNumber) + 1;
 
