@@ -17,39 +17,85 @@
     <section id="introScreen">
         <div id="introTitle">THE CAVE</div>
 
-        <img id="introImage" src="images/introCave1_200H.jpg" alt="intro image">
-        <h3>How you got here...</h3>
-        <p>
-            The legends were old and the common folk didn't believe.
-            The great wizards, in their towers of learning, scoffed that such a thing could exist.  Yet...
-        </p>
-        <p>
-            In your family’s history, an ancient ancestor's journal speaks of the Cave of Gems.  Magical gems.
-            The possessor of such would have the power of a high-level mage at their fingertips!
-            Alas, your ancestor did not survive the trip, though his remains, and journal were found
-            floating in the river that passes through your family's lands.  But that was hundreds of years ago..
-        </p>
-        <p>
-            It is desperate times for your family.  The king's taxes are driving your family bankrupt
-            while the mages extort a heavy price to NOT curse your lands.  You decided to venture forth and find the cave.
-            Then you can get the gems, defy the mages and bless your lands so you can pay the king.
-        </p>
-        <p>
-            Everything was going well.  You followed the river, figuring you could find the cave at it's source.  But the
-            river disappeared into the side of a cliff.  You climbed the cliff, and after searching the plain above,
-            found a small stream that seemed to dive into the ground.  As you approached, the ground gave way beneath you,
-            plunging you into darkness.....
-        </p>
+        <div id="MainIntro">
 
-        <div>
-            <button id="Adventure">Start Your Adventure!</button>
-        </div>
+            <div id="IntroStartPicture"></div>
+
+            <!--<img id="introImage" src="images/introCave1_200H.jpg" alt="intro image">-->
+            <!--<h3>How you got here...</h3>-->
+            <div id="LegendText1" class="Legend">The legends were old and the common folk didn't believe.....</div>
+            <div id="LegendText2" class="Legend">The great wizards, <br /> in their towers of learning, <br />scoffed that such a thing could exist. <br /><br />Yet...</div>
+            <div id="LegendText3" class="Legend"></div>
+            <div id="LegendText4" class="Legend">In your family’s history, an ancient ancestor's journal speaks of the Cave of Gems. <br /> <br />Magical gems.</div>
+            <div id="LegendText5" class="Legend">The possessor of such would have the power of a high-level mage at their fingertips!</div>
+            <div id="LegendText6" class="Legend">Alas, <br /> your ancestor did not survive the trip, <br /> though his remains, and journal were found......</div>
+            <div id="LegendText7" class="Legend">floating in the river that passes through your family's lands.</div>
+            <div id="LegendText8" class="Legend">But that was hundreds of years ago.....</div>
+            <div id="LegendText9" class="Legend">It's desperate times for you and your family now.  <br /> <br /> The king's taxes are driving your family bankrupt</div>
+            <div id="LegendText10" class="Legend">while the mages extort a heavy price to NOT curse your lands. </div>
+            <div id="LegendText11" class="Legend">There is nothing for it. <br />  You really only have one option. <br /> You decide to venture forth and find the cave!</div>
+            <div id="LegendText12" class="Legend">Then you can get the gems, <br /> defy the mages, <br /> and bless your lands so you can pay the king!</div>
+            <div id="LegendText13" class="Legend">Everything was going well. </div>
+            <div id="LegendText14" class="Legend">You followed the river, <br /> figuring you could find the cave at it's source.</div>
+            <div id="LegendText15" class="Legend">But the river disappeared into the side of a strange looking cliff!</div>
+            <div id="LegendText16" class="Legend">You climbed the cliff, and after searching the plain above,</div>
+            <div id="LegendText17" class="Legend">found a small stream that seemed to dive into the hard, parched ground.</div>
+            <div id="LegendText18" class="Legend">As you approach, the ground gives way beneath you!</div>
+            <div id="LegendText19" class="Legend">You plunge down into darkness.....</div>
+
+            <div id="IntroPicture1"></div>
+            <div id="IntroPicture2"></div>
+
+
+        </div> <!-- End main intro div -->
+    <br />
+    <br />
+
+    <div id="AdventureButtonHolder">
+        <button id="PlayIntro">Play Introduction</button>
+        <button id="Adventure">Start Your Adventure!</button>
+
+    </div>
         <br />
         <br />
 
     </section>  <!-- end intro screen section -->
+    <!--    Old INtro Screen..
+      <section id="introScreen">
+          <div id="introTitle">THE CAVE</div>
 
+          <img id="introImage" src="images/introCave1_200H.jpg" alt="intro image">
+          <h3>How you got here...</h3>
+          <p>
+              The legends were old and the common folk didn't believe.
+              The great wizards, in their towers of learning, scoffed that such a thing could exist.  Yet...
+          </p>
+          <p>
+              In your family’s history, an ancient ancestor's journal speaks of the Cave of Gems.  Magical gems.
+              The possessor of such would have the power of a high-level mage at their fingertips!
+              Alas, your ancestor did not survive the trip, though his remains, and journal were found
+              floating in the river that passes through your family's lands.  But that was hundreds of years ago..
+          </p>
+          <p>
+              It is desperate times for your family.  The king's taxes are driving your family bankrupt
+              while the mages extort a heavy price to NOT curse your lands.  You decided to venture forth and find the cave.
+              Then you can get the gems, defy the mages and bless your lands so you can pay the king.
+          </p>
+          <p>
+              Everything was going well.  You followed the river, figuring you could find the cave at it's source.  But the
+              river disappeared into the side of a cliff.  You climbed the cliff, and after searching the plain above,
+              found a small stream that seemed to dive into the ground.  As you approached, the ground gave way beneath you,
+              plunging you into darkness.....
+          </p>
 
+          <div>
+              <button id="Adventure">Start Your Adventure!</button>
+          </div>
+          <br />
+          <br />
+
+      </section>    -->
+    <!-- end  Olde intro screen section -->
     <!-- Game Screen section-->
     <section id="gameScreen">
 
@@ -60,7 +106,7 @@
             </div>
 
             <div id="screenImage">
-
+                <div id="theMagicHaze"></div>
             </div>
 
 
@@ -71,19 +117,17 @@
         <p id="output2"></p>
         <br />
         <input id="input" type="text" placeholder="Enter your action here..." />
-        <button id="playGame"> Enter </button>
-        <button id="helpMe"> Help </button>
-        <button id="saveGame"> Save </button>
-        <button id="loadGame"> Load </button>
-        <button id="newGame"> New Game </button>
+        <button id="playGame" class="buttonCool"> Enter </button>
+        <button id="helpMe" class="buttonCool"> Help </button>
+        <button id="saveGame" class="buttonCool"> Save </button>
+        <button id="loadGame" class="buttonCool"> Load </button>
+        <button id="newGame" class="buttonCool"> New Game </button>
 
         <!-- spacers at the bottom  -->
         <br />
         <br />
 
     </section>   <!--  end game screen section   -->
-
-
     <!--  HELP SCREEN section -->
     <section id="helpScreen">
         <div id="introTitle">HELP!</div>
@@ -124,7 +168,8 @@
         </div>
 
     </section>   <!--  end helpScreen screen section   -->
-
+    <!-- Link in the tween max stuff -->
+    <script type="text/javascript" src="TweenMax.min.js"></script>
 
     <!-- link in the js script  -->
     <script src="js/TheCave.js"></script>
